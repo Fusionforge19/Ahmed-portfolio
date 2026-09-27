@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Gate Dive — Arcade Game</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #090D16;
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #game-container {
+      position: relative;
+      width: 100%;
+      max-width: 800px;
+      aspect-ratio: 16 / 9;
+      background: #090D16;
+      border: 1px solid #1E2A40;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 20px rgba(77, 243, 255, 0.15);
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+    }
+
+    /* Overlay HUD */
+    #hud {
+      position: absolute;
+      top: 14px;
+      left: 18px;
+      right: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+      font-family: monospace;
+      font-weight: 700;
+      letter-spacing: 1px;
+      z-index: 10;
+    }
+
+    .hud-chip {
+      background: rgba(13, 17, 28, 0.85);
+      border: 1px solid rgba(77, 243, 255, 0.35);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 13px;
+      color: #E2F0FF;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .hud-chip span {
+      color: #4DF3FF;
+    }
+
+    #shield-indicator {
+      color: #9D5BFF;
+      border-color: rgba(157, 91, 255, 0.5);
+      transition: opacity 0.2s;
+    }
+
+    /* UI Overlay screens */
+    .screen-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(9, 13, 22, 0.86);
+      backdrop-filter: blur(8px);
+      z-index: 20;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    h1.title {
+      font-size: clamp(28px, 6vw, 44px);
+      font-weight: 900;
+      letter-spacing: 4px;
+      background: linear-gradient(135deg, #4DF3FF 0%, #FFFFFF 50%, #9D5BFF 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 8px;
+      text-shadow: 0 0 20px rgba(77, 243, 255, 0.4);
+    }
+
+    .subtitle {
+      font-size: clamp(12px, 2.5vw, 14px);
+      color: #7ABFFF;
+      margin-bottom: 24px;
+      max-width: 480px;
+      line-height: 1.5;
+    }
+
+    .instructions {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .key-badge {
+      background: rgba(30, 42, 64, 0.6);
+      border: 1px solid rgba(77, 243, 255, 0.25);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 11px;
+      font-family: monospace;
+      color: #E2F0FF;
+    }
+
+    .btn-action {
+      background: linear-gradient(135deg, #4DF3FF, #9D5BFF);
+      color: #090D16;
+      border: none;
+      padding: 12px 32px;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      border-radius: 30px;
+      cursor: pointer;
+      box-shadow: 0 0 24px rgba(77, 243, 255, 0.4);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .btn-action:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 32px rgba(77, 243, 255, 0.7);
+    }
+
+    .btn-action:active {
+      transform: scale(0.97);
+    }
+
+    /* Countdown HUD */
+    #countdown-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: monospace;
+      font-size: 72px;
+      font-weight: 900;
+      color: #4DF3FF;
+      text-shadow: 0 0 30px #4DF3FF, 0 0 60px #9D5BFF;
+      z-index: 15;
+    }
+  </style>
+</head>
+<body>
+  <div id="game-container">
+    <canvas id="gameCanvas" width="800" height="450"></canvas>
+
+    <!-- Top HUD -->
+    <div id="hud" class="hidden">
+      <div class="hud-chip">SCORE: <span id="hud-score">0</span></div>
+      <div id="shield-indicator" class="hud-chip">SHIELD: <span id="hud-shield">READY</span></div>
+      <div class="hud-chip">BEST: <span id="hud-best">0</span></div>
+    </div>
+
+    <!-- Countdown overlay -->
+    <div id="countdown-overlay" class="hidden">3</div>
+
+    <!-- Start Screen -->
+    <div id="start-screen" class="screen-overlay">
+      <h1 class="title">GATE DIVE</h1>
+      <p class="subtitle">Navigate cyber gate barriers, auto-destroy sentinel drones, and survive the digital slipstream.</p>
+      <div class="instructions">
+        <span class="key-badge">🖱️ Move Mouse / Touch</span>
+        <span class="key-badge">⌨️ WASD / Arrows</span>
+        <span class="key-badge">⚡ Auto-Fire Active</span>
+      </div>
+      <button id="btn-start" class="btn-action">ENTER THE GATE</button>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="game-over-screen" class="screen-overlay hidden">
+      <h1 class="title" style="background: linear-gradient(135deg, #FF5787, #9D5BFF); -webkit-background-clip: text; background-clip: text;">SYSTEM DISRUPTED</h1>
+      <p class="subtitle">Final Score: <span id="final-score" style="color:#4DF3FF; font-weight:700;">0</span> &bull; Best: <span id="final-best" style="color:#9D5BFF; font-weight:700;">0</span></p>
+      <button id="btn-restart" class="btn-action">RETRY DIVE</button>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const canvas = document.getElementById('gameCanvas');
+      const ctx = canvas.getContext('2d');
+      const W = canvas.width;
+      const H = canvas.height;
+
+      const hud = document.getElementById('hud');
+      const hudScore = document.getElementById('hud-score');
+      const hudShield = document.getElementById('hud-shield');
+      const hudBest = document.getElementById('hud-best');
+      const countdownEl = document.getElementById('countdown-overlay');
+      const startScreen = document.getElementById('start-screen');
+      const gameOverScreen = document.getElementById('game-over-screen');
+      const finalScoreEl = document.getElementById('final-score');
+      const finalBestEl = document.getElementById('final-best');
+      const btnStart = document.getElementById('btn-start');
+      const btnRestart = document.getElementById('btn-restart');
+
+      let highScore = 0;
+      try {
+        highScore = parseInt(localStorage.getItem('gatedive_highscore') || '0', 10) || 0;
+      } catch (e) {
+        highScore = 0;
+      }
+      hudBest.textContent = highScore;
+
+      // ── Game State ──────────────────────────────────────────────────────────
+      let state = 'TITLE'; // TITLE, COUNTDOWN, PLAYING, GAMEOVER
+      let score = 0;
+      let gameTime = 0; // in seconds
+      let frame = 0;
+      let screenShake = 0;
+
+      // ── Player ──────────────────────────────────────────────────────────────
+      const player = {
+        x: 100,
+        y: H / 2,
+        targetY: H / 2,
+        targetX: 100,
+        r: 16, // Visual radius
+        hitboxR: 11, // Forgiving collision radius (~70%)
+        invincibleTime: 0,
+        fireTimer: 0,
+        bobTimer: 0
+      };
+
+      // ── Game Collections ───────────────────────────────────────────────────
+      let bullets = [];
+      let enemies = [];
+      let gates = [];
+      let particles = [];
+      let floaters = [];
+
+      // ── Input Handling ──────────────────────────────────────────────────────
+      const keys = {};
+
+      function forwardScroll(deltaY) {
+        try {
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage({
+              type: 'PORTFOLIO_SCROLL',
+              deltaY: deltaY
+            }, '*');
+          }
+        } catch (err) {}
+      }
+
+      // Always forward wheel scrolling over the game to the portfolio page!
+      window.addEventListener('wheel', (e) => {
+        forwardScroll(e.deltaY);
+      }, { passive: true });
+
+      window.addEventListener('keydown', (e) => {
+        keys[e.code] = true;
+        if (state === 'TITLE' || state === 'GAMEOVER') {
+          if (e.code === 'Space' || e.code === 'Enter') {
+            e.preventDefault();
+            startGame();
+            return;
+          }
+          // Let arrow keys and page keys scroll the portfolio page when game is not active
+          if (e.code === 'ArrowUp' || e.code === 'PageUp') {
+            forwardScroll(e.code === 'PageUp' ? -400 : -100);
+            return;
+          }
+          if (e.code === 'ArrowDown' || e.code === 'PageDown') {
+            forwardScroll(e.code === 'PageDown' ? 400 : 100);
+            return;
+          }
+        }
+      });
+      window.addEventListener('keyup', (e) => { keys[e.code] = false; });
+
+      function handlePointer(e) {
+        const rect = canvas.getBoundingClientRect();
+        const scaleX = W / rect.width;
+        const scaleY = H / rect.height;
+        const clientX = (e.touches && e.touches.length > 0) ? e.touches[0].clientX : e.clientX;
+        const clientY = (e.touches && e.touches.length > 0) ? e.touches[0].clientY : e.clientY;
+        if (clientX === undefined || clientY === undefined) return;
+        
+        player.targetX = Math.max(40, Math.min(W * 0.45, (clientX - rect.left) * scaleX));
+        player.targetY = Math.max(player.r + 10, Math.min(H - player.r - 10, (clientY - rect.top) * scaleY));
+      }
+
+      canvas.addEventListener('mousemove', handlePointer);
+
+      // Only preventDefault on touch if actively playing; allow page touch scroll on title/gameover!
+      let touchStartY = 0;
+      canvas.addEventListener('touchstart', (e) => {
+        if (e.touches && e.touches.length > 0) touchStartY = e.touches[0].clientY;
+        if (state === 'PLAYING') {
+          e.preventDefault();
+          handlePointer(e);
+        }
+      }, { passive: false });
+
+      canvas.addEventListener('touchmove', (e) => {
+        if (state === 'PLAYING') {
+          e.preventDefault();
+          handlePointer(e);
+        } else if (e.touches && e.touches.length > 0) {
+          // In title/gameover, forward swipe delta to parent scroll
+          const dy = touchStartY - e.touches[0].clientY;
+          touchStartY = e.touches[0].clientY;
+          forwardScroll(dy);
+        }
+      }, { passive: false });
+
+      const container = document.getElementById('game-container');
+      container.addEventListener('mouseleave', () => {
+        try { window.parent.focus(); } catch (err) {}
+      });
+
+      btnStart.addEventListener('click', startGame);
+      btnRestart.addEventListener('click', startGame);
+
+      // ── Start / Countdown Flow ──────────────────────────────────────────────
+      function startGame() {
+        if (state === 'COUNTDOWN' || state === 'PLAYING') return;
+        startScreen.classList.add('hidden');
+        gameOverScreen.classList.add('hidden');
+        hud.classList.remove('hidden');
+
+        // Reset entities
+        score = 0;
+        gameTime = 0;
+        frame = 0;
+        screenShake = 0;
+        bullets = [];
+        enemies = [];
+        gates = [];
+        particles = [];
+        floaters = [];
+
+        player.x = 100;
+        player.y = H / 2;
+        player.targetX = 100;
+        player.targetY = H / 2;
+        player.invincibleTime = 2.0; // 2s shield on start!
+
+        hudScore.textContent = '0';
+        hudShield.textContent = 'ACTIVE';
+        hudShield.parentElement.style.opacity = '1';
+
+        // 3-2-1 Countdown beat
+        state = 'COUNTDOWN';
+        countdownEl.classList.remove('hidden');
+        let count = 3;
+        countdownEl.textContent = count;
+
+        const countInterval = setInterval(() => {
+          count--;
+          if (count > 0) {
+            countdownEl.textContent = count;
+            spawnSparks(W / 2, H / 2, '#4DF3FF', 10);
+          } else if (count === 0) {
+            countdownEl.textContent = 'GO!';
+            spawnSparks(W / 2, H / 2, '#9D5BFF', 20);
+          } else {
+            clearInterval(countInterval);
+            countdownEl.classList.add('hidden');
+            state = 'PLAYING';
+          }
+        }, 550);
+      }
+
+      // ── Particle Helpers ────────────────────────────────────────────────────
+      function spawnSparks(x, y, color, count = 8, speedScale = 1) {
+        for (let i = 0; i < count; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = (Math.random() * 3.5 + 1.2) * speedScale;
+          particles.push({
+            x, y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            r: Math.random() * 2.8 + 1.5,
+            color,
+            alpha: 1.0,
+            decay: Math.random() * 0.025 + 0.02
+          });
+        }
+      }
+
+      function addFloatingText(x, y, text, color = '#4DF3FF') {
+        floaters.push({
+          x, y,
+          text,
+          color,
+          alpha: 1.0,
+          vy: -1.2
+        });
+      }
+
+      // ── Spawners ────────────────────────────────────────────────────────────
+      let enemySpawnTimer = 0;
+      let gateSpawnTimer = 0;
+
+      function spawnEnemy() {
+        // Drone enemy
+        const y = 40 + Math.random() * (H - 80);
+        enemies.push({
+          x: W + 30,
+          y,
+          baseY: y,
+          hp: 2,
+          maxHp: 2,
+          r: 16,
+          hitboxR: 12,
+          spawnAge: 0, // for scale-pop animation
+          spawnDuration: 12, // 12 frames entry flash
+          oscSpeed: Math.random() * 0.04 + 0.02,
+          oscAmp: Math.random() * 30 + 15,
+          color: Math.random() > 0.4 ? '#9D5BFF' : '#FF5787'
+        });
+      }
+
+      function spawnGate() {
+        const gapH = 130 + Math.random() * 40; // Generous gate gap
+        const gapY = 50 + Math.random() * (H - gapH - 100);
+        gates.push({
+          x: W + 20,
+          gapY,
+          gapH,
+          w: 22,
+          passed: false,
+          color: '#4DF3FF'
+        });
+      }
+
+      // ── Update Loop ─────────────────────────────────────────────────────────
+      function update() {
+        frame++;
+
+        // Screen shake decay
+        if (screenShake > 0) screenShake *= 0.88;
+        if (screenShake < 0.2) screenShake = 0;
+
+        // Player bob timer
+        player.bobTimer += 0.05;
+
+        // Player input (Keyboard steering)
+        const moveSpeed = 6.0;
+        if (keys['KeyW'] || keys['ArrowUp']) player.targetY -= moveSpeed;
+        if (keys['KeyS'] || keys['ArrowDown']) player.targetY += moveSpeed;
+        if (keys['KeyA'] || keys['ArrowLeft']) player.targetX -= moveSpeed;
+        if (keys['KeyD'] || keys['ArrowRight']) player.targetX += moveSpeed;
+
+        // Clamp target
+        player.targetX = Math.max(40, Math.min(W * 0.45, player.targetX));
+        player.targetY = Math.max(player.r + 8, Math.min(H - player.r - 8, player.targetY));
+
+        // Smooth player interpolation
+        player.x += (player.targetX - player.x) * 0.2;
+        player.y += (player.targetY - player.y) * 0.2;
+
+        // Player engine exhaust particles
+        if (frame % 2 === 0) {
+          particles.push({
+            x: player.x - player.r * 0.8,
+            y: player.y + (Math.random() - 0.5) * 8,
+            vx: -(Math.random() * 2.5 + 2.0),
+            vy: (Math.random() - 0.5) * 1.0,
+            r: Math.random() * 3 + 1.5,
+            color: Math.random() > 0.3 ? '#4DF3FF' : '#9D5BFF',
+            alpha: 0.8,
+            decay: 0.04
+          });
+        }
+
+        // Countdown / Paused state
+        if (state !== 'PLAYING') {
+          updateParticles();
+          return;
+        }
+
+        gameTime += 1 / 60;
+
+        // Invincibility countdown
+        if (player.invincibleTime > 0) {
+          player.invincibleTime -= 1 / 60;
+          if (player.invincibleTime <= 0) {
+            player.invincibleTime = 0;
+            hudShield.textContent = 'OFF';
+            hudShield.parentElement.style.opacity = '0.5';
+          }
+        }
+
+        // ── Auto-fire twin plasma bolts ───────────────────────────────────────
+        player.fireTimer++;
+        if (player.fireTimer >= 10) { // Fast, responsive 6 shots per sec
+          player.fireTimer = 0;
+          const offset = 8;
+          // Top bolt
+          bullets.push({
+            x: player.x + player.r,
+            y: player.y - offset,
+            vx: 11,
+            r: 5,
+            hitR: 9 // Wider bolt hit radius for generous hit registration
+          });
+          // Bottom bolt
+          bullets.push({
+            x: player.x + player.r,
+            y: player.y + offset,
+            vx: 11,
+            r: 5,
+            hitR: 9
+          });
+        }
+
+        // ── Difficulty Curve ──────────────────────────────────────────────────
+        // Starts very gentle for first 20s, scales smoothly up to 60s
+        const progress = Math.min(1.0, gameTime / 60);
+        // Initial enemy spawn: every 180 frames (~3.0s) -> ramps to 90 frames (~1.5s)
+        const enemyInterval = Math.round(180 - progress * 90);
+        // Initial speed: 2.2 px/frame -> ramps to 4.2 px/frame
+        const worldSpeed = 2.2 + progress * 2.0;
+
+        // Spawn logic
+        enemySpawnTimer++;
+        if (enemySpawnTimer >= enemyInterval) {
+          enemySpawnTimer = 0;
+          spawnEnemy();
+        }
+
+        gateSpawnTimer++;
+        // Gates spawn every 240 frames (~4s) down to 150 frames
+        if (gateSpawnTimer >= (240 - progress * 90)) {
+          gateSpawnTimer = 0;
+          spawnGate();
+        }
+
+        // ── Update Bullets ────────────────────────────────────────────────────
+        for (let i = bullets.length - 1; i >= 0; i--) {
+          const b = bullets[i];
+          b.x += b.vx;
+
+          // Trail
+          if (frame % 2 === 0) {
+            particles.push({
+              x: b.x, y: b.y,
+              vx: -1.5, vy: 0,
+              r: 2,
+              color: '#4DF3FF',
+              alpha: 0.5,
+              decay: 0.08
+            });
+          }
+
+          // Bullet - Enemy collision
+          let hit = false;
+          for (let j = enemies.length - 1; j >= 0; j--) {
+            const e = enemies[j];
+            const dist = Math.hypot(b.x - e.x, b.y - e.y);
+            if (dist < b.hitR + e.hitboxR) {
+              e.hp--;
+              hit = true;
+              spawnSparks(b.x, b.y, '#4DF3FF', 5);
+
+              if (e.hp <= 0) {
+                // Enemy destroyed
+                spawnSparks(e.x, e.y, e.color, 16, 1.4);
+                screenShake = 3.5;
+                score += 150;
+                addFloatingText(e.x, e.y - 10, '+150', '#4DF3FF');
+                enemies.splice(j, 1);
+              }
+              break;
+            }
+          }
+
+          if (hit || b.x > W + 20) {
+            bullets.splice(i, 1);
+          }
+        }
+
+        // ── Update Enemies ────────────────────────────────────────────────────
+        for (let i = enemies.length - 1; i >= 0; i--) {
+          const e = enemies[i];
+          if (e.spawnAge < e.spawnDuration) e.spawnAge++;
+
+          e.x -= worldSpeed * 0.9;
+          e.y = e.baseY + Math.sin(frame * e.oscSpeed) * e.oscAmp;
+
+          // Collision with player
+          if (player.invincibleTime <= 0) {
+            const dist = Math.hypot(player.x - e.x, player.y - e.y);
+            if (dist < player.hitboxR + e.hitboxR) {
+              triggerGameOver();
+              return;
+            }
+          }
+
+          if (e.x < -40) enemies.splice(i, 1);
+        }
+
+        // ── Update Gates ──────────────────────────────────────────────────────
+        for (let i = gates.length - 1; i >= 0; i--) {
+          const g = gates[i];
+          g.x -= worldSpeed;
+
+          // Check if player passed through gate
+          if (!g.passed && g.x + g.w < player.x) {
+            g.passed = true;
+            score += 250;
+            addFloatingText(player.x + 20, player.y, '+250 DIVE', '#9D5BFF');
+            spawnSparks(player.x, player.y, '#9D5BFF', 8);
+          }
+
+          // Gate collision (top & bottom pillars)
+          if (player.invincibleTime <= 0) {
+            if (player.x + player.hitboxR > g.x && player.x - player.hitboxR < g.x + g.w) {
+              if (player.y - player.hitboxR < g.gapY || player.y + player.hitboxR > g.gapY + g.gapH) {
+                triggerGameOver();
+                return;
+              }
+            }
+          }
+
+          if (g.x < -50) gates.splice(i, 1);
+        }
+
+        hudScore.textContent = score;
+        updateParticles();
+      }
+
+      function updateParticles() {
+        for (let i = particles.length - 1; i >= 0; i--) {
+          const p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.alpha -= p.decay;
+          if (p.alpha <= 0) particles.splice(i, 1);
+        }
+
+        for (let i = floaters.length - 1; i >= 0; i--) {
+          const f = floaters[i];
+          f.y += f.vy;
+          f.alpha -= 0.025;
+          if (f.alpha <= 0) floaters.splice(i, 1);
+        }
+      }
+
+      function triggerGameOver() {
+        state = 'GAMEOVER';
+        screenShake = 12;
+        spawnSparks(player.x, player.y, '#FF5787', 30, 2);
+
+        if (score > highScore) {
+          highScore = score;
+          try {
+            localStorage.setItem('gatedive_highscore', highScore.toString());
+          } catch (e) {}
+        }
+
+        hudBest.textContent = highScore;
+        finalScoreEl.textContent = score;
+        finalBestEl.textContent = highScore;
+
+        setTimeout(() => {
+          gameOverScreen.classList.remove('hidden');
+          try {
+            window.parent.focus();
+          } catch (err) {}
+        }, 500);
+      }
+
+      // ── Draw Loop ───────────────────────────────────────────────────────────
+      function draw() {
+        ctx.save();
+
+        // Screen Shake
+        if (screenShake > 0) {
+          const sx = (Math.random() - 0.5) * screenShake * 2;
+          const sy = (Math.random() - 0.5) * screenShake * 2;
+          ctx.translate(sx, sy);
+        }
+
+        // Clean Background
+        ctx.fillStyle = '#090D16';
+        ctx.fillRect(0, 0, W, H);
+
+        // Cyber Grid Lines with subtle perspective
+        ctx.strokeStyle = 'rgba(30, 42, 64, 0.4)';
+        ctx.lineWidth = 1;
+        const gridOffset = (frame * 1.5) % 50;
+
+        for (let x = -gridOffset; x < W; x += 50) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, H);
+          ctx.stroke();
+        }
+        for (let y = 0; y < H; y += 45) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(W, y);
+          ctx.stroke();
+        }
+
+        // Draw Gates
+        for (const g of gates) {
+          // Glow gradient on pillars
+          const grad = ctx.createLinearGradient(g.x, 0, g.x + g.w, 0);
+          grad.addColorStop(0, '#1E2A40');
+          grad.addColorStop(0.5, '#4DF3FF');
+          grad.addColorStop(1, '#9D5BFF');
+
+          ctx.fillStyle = grad;
+          ctx.shadowColor = '#4DF3FF';
+          ctx.shadowBlur = 12;
+
+          // Top Pillar
+          ctx.fillRect(g.x, 0, g.w, g.gapY);
+          // Bottom Pillar
+          ctx.fillRect(g.x, g.gapY + g.gapH, g.w, H - (g.gapY + g.gapH));
+
+          // Gate energy threshold nodes
+          ctx.fillStyle = '#FFFFFF';
+          ctx.beginPath();
+          ctx.arc(g.x + g.w / 2, g.gapY, 6, 0, Math.PI * 2);
+          ctx.arc(g.x + g.w / 2, g.gapY + g.gapH, 6, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.shadowBlur = 0;
+        }
+
+        // Draw Bullets
+        ctx.shadowColor = '#4DF3FF';
+        ctx.shadowBlur = 10;
+        for (const b of bullets) {
+          ctx.fillStyle = '#FFFFFF';
+          ctx.beginPath();
+          ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.fillStyle = '#4DF3FF';
+          ctx.beginPath();
+          ctx.arc(b.x - 3, b.y, b.r * 0.7, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.shadowBlur = 0;
+
+        // Draw Enemies
+        for (const e of enemies) {
+          // Scale pop on spawn
+          const scale = e.spawnAge < e.spawnDuration ? (e.spawnAge / e.spawnDuration) : 1.0;
+          ctx.save();
+          ctx.translate(e.x, e.y);
+          ctx.scale(scale, scale);
+
+          // Warp-in flash ring
+          if (e.spawnAge < e.spawnDuration) {
+            ctx.strokeStyle = '#4DF3FF';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(0, 0, (1 - scale) * 40 + e.r, 0, Math.PI * 2);
+            ctx.stroke();
+          }
+
+          // Diamond Drone Body
+          ctx.shadowColor = e.color;
+          ctx.shadowBlur = 14;
+          ctx.fillStyle = e.color;
+          ctx.beginPath();
+          ctx.moveTo(0, -e.r);
+          ctx.lineTo(e.r * 1.2, 0);
+          ctx.lineTo(0, e.r);
+          ctx.lineTo(-e.r * 0.8, 0);
+          ctx.closePath();
+          ctx.fill();
+
+          // Core
+          ctx.fillStyle = '#FFFFFF';
+          ctx.beginPath();
+          ctx.arc(0, 0, 5, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.restore();
+        }
+        ctx.shadowBlur = 0;
+
+        // Draw Particles
+        for (const p of particles) {
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, p.alpha);
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        // Draw Floating Score Floaters
+        for (const f of floaters) {
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, f.alpha);
+          ctx.font = 'bold 15px monospace';
+          ctx.fillStyle = f.color;
+          ctx.shadowColor = f.color;
+          ctx.shadowBlur = 8;
+          ctx.fillText(f.text, f.x, f.y);
+          ctx.restore();
+        }
+
+        // Draw Player (Idle Bob + Pulse)
+        if (state !== 'GAMEOVER') {
+          ctx.save();
+          const idleY = player.y + Math.sin(player.bobTimer) * 2.5;
+
+          // Invincibility Shield Ring
+          if (player.invincibleTime > 0) {
+            const shieldAlpha = 0.5 + Math.sin(frame * 0.25) * 0.35;
+            ctx.strokeStyle = `rgba(77, 243, 255, ${shieldAlpha})`;
+            ctx.lineWidth = 2.5;
+            ctx.shadowColor = '#4DF3FF';
+            ctx.shadowBlur = 16;
+            ctx.beginPath();
+            ctx.arc(player.x, idleY, player.r + 9, 0, Math.PI * 2);
+            ctx.stroke();
+          }
+
+          // Player Radial Glow Core
+          const pg = ctx.createRadialGradient(player.x - 2, idleY - 2, 2, player.x, idleY, player.r);
+          pg.addColorStop(0, '#FFFFFF');
+          pg.addColorStop(0.5, '#4DF3FF');
+          pg.addColorStop(1, '#9D5BFF');
+
+          ctx.shadowColor = '#4DF3FF';
+          ctx.shadowBlur = 20;
+          ctx.fillStyle = pg;
+          ctx.beginPath();
+          ctx.arc(player.x, idleY, player.r, 0, Math.PI * 2);
+          ctx.fill();
+
+          // Inner Specular Dot
+          ctx.fillStyle = '#FFFFFF';
+          ctx.beginPath();
+          ctx.arc(player.x - 4, idleY - 4, 3, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.restore();
+        }
+
+        ctx.restore();
+      }
+
+      // ── Main RAF Loop (paced for ~60 FPS on high-refresh displays) ──────────
+      let lastTime = 0;
+      const targetInterval = 1000 / 60; // ~16.6ms
+      function loop(timestamp) {
+        if (!lastTime) lastTime = timestamp;
+        const delta = timestamp - lastTime;
+
+        if (delta >= targetInterval - 2) {
+          update();
+          draw();
+          lastTime = timestamp - (delta % targetInterval);
+        }
+        requestAnimationFrame(loop);
+      }
+
+      requestAnimationFrame(loop);
+    })();
+  </script>
+</body>
+</html>

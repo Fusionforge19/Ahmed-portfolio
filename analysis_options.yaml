@@ -1,0 +1,8 @@
+analyzer:
+  exclude:
+    - build/**
+    - web/**
+    - lib/generated_plugin_registrant.dart
+  errors:
+    deprecated_member_use: ignore
+include: package:flutter_lints/flutter.yaml
