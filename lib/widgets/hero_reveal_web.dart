@@ -17,7 +17,7 @@ void _registerHeroRevealView() {
   // ignore: undefined_prefixed_name
   ui.platformViewRegistry.registerViewFactory(_kHeroRevealViewType, (int viewId) {
     final iframe = html.IFrameElement()
-      ..src = 'assets/hero_reveal/index.html'
+      ..src = 'hero_reveal/index.html'
       ..style.border = 'none'
       ..style.width = '100%'
       ..style.height = '100%'

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Hero Reveal — Anime.js v4 splitText</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      overflow: hidden;
+      font-family: 'Roboto', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .hero-reveal-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 4px 0;
+    }
+
+    /* Heading styling: transparent container so children render cleanly without double-fill */
+    .hero-heading {
+      font-size: clamp(48px, 8vw, 76px);
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      line-height: 1.05;
+      margin: 0;
+      background: none;
+      -webkit-text-fill-color: initial;
+    }
+
+    /* Screen-reader accessible clone created by anime.js splitText:
+       Must be completely hidden visually to prevent leaking glyphs under -webkit-background-clip: text */
+    .hero-heading > span[style*="clip"],
+    .hero-heading > span:first-child:not([data-word]):not([data-char]),
+    .hero-subheading > span[style*="clip"],
+    .hero-subheading > span:first-child:not([data-word]):not([data-char]) {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      width: 0 !important;
+      height: 0 !important;
+      pointer-events: none !important;
+      background: none !important;
+      -webkit-text-fill-color: transparent !important;
+      color: transparent !important;
+    }
+
+    /* Word wrapper: neutral transparent container */
+    .hero-heading [data-word] {
+      display: inline-block;
+      background: none;
+      -webkit-text-fill-color: initial;
+    }
+
+    /* Individual animated characters: pristine Glacier Blue gradient applied to each character */
+    .hero-heading [data-char] {
+      display: inline-block;
+      will-change: transform, opacity;
+      background: linear-gradient(135deg, #16324A 0%, #3D6E8A 50%, #8FB8CC 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+    }
+
+    /* Subheading styling */
+    .hero-subheading {
+      font-size: clamp(16px, 2.5vw, 22px);
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      color: #5D7A8C;
+      margin-top: 10px;
+      line-height: 1.35;
+    }
+
+    .hero-subheading [data-word] {
+      display: inline-block;
+      will-change: transform, opacity;
+      margin-right: 0.28em;
+      color: #5D7A8C;
+    }
+  </style>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "animejs": "./anime.esm.min.js"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="hero-reveal-container">
+    <h1 class="hero-heading">Ahmed</h1>
+    <div class="hero-subheading">Real-Time AI &amp; Gameplay Systems</div>
+  </div>
+
+  <script type="module">
+    import { createTimeline, splitText, stagger } from 'animejs';
+
+    function initReveal() {
+      // Split heading into chars for fluid letter-by-letter reveal
+      const splitHeading = splitText('.hero-heading', {
+        words: true,
+        chars: true,
+        accessible: true,
+      });
+
+      // Split subheading into words
+      const splitSubheading = splitText('.hero-subheading', {
+        words: true,
+        accessible: true,
+      });
+
+      // Ensure any accessible screen-reader clone is visually hidden
+      document.querySelectorAll('.hero-heading > span[style*="clip"], .hero-subheading > span[style*="clip"]').forEach(el => {
+        el.style.setProperty('display', 'none', 'important');
+      });
+
+      // Create timeline with outExpo ease
+      const heroReveal = createTimeline({
+        defaults: { ease: 'outExpo' },
+      })
+      // Staggered letters for "Ahmed" (heading)
+      .add(splitHeading.chars || splitHeading.words, {
+        opacity: [0, 1],
+        translateY: [40, 0],
+        duration: 750,
+        delay: stagger(40),
+      }, 0)
+      // Staggered words for subheading
+      .add(splitSubheading.words, {
+        opacity: [0, 1],
+        translateY: [25, 0],
+        duration: 700,
+        delay: stagger(40),
+      }, 200);
+
+      console.log('Anime.js v4 hero splitText reveal initialized.');
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => requestAnimationFrame(initReveal));
+    } else {
+      requestAnimationFrame(initReveal);
+    }
+  </script>
+</body>
+</html>
