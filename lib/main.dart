@@ -8,6 +8,7 @@ import 'widgets/projects_section.dart';
 import 'widgets/about_section.dart';
 import 'widgets/connect_section.dart';
 import 'widgets/circuit_track_divider.dart';
+import 'widgets/scroll_reveal.dart';
 import 'game_embed/game_embed.dart';
 
 void main() {
@@ -135,45 +136,60 @@ class _PortfolioHomeState extends State<PortfolioHome> {
                   const CircuitTrackDivider(),
 
                   // 2 — Play (isolated RepaintBoundary for embedded game)
-                  RepaintBoundary(
-                    child: PlaySection(
-                      sectionKey: _sectionKeys['play']!,
+                  ScrollReveal(
+                    controller: _scrollController,
+                    child: RepaintBoundary(
+                      child: PlaySection(
+                        sectionKey: _sectionKeys['play']!,
+                      ),
                     ),
                   ),
 
                   const _SectionDivider(),
 
                   // 3 — Terminal (isolated RepaintBoundary)
-                  RepaintBoundary(
-                    child: TerminalSection(
-                      sectionKey: _sectionKeys['terminal']!,
+                  ScrollReveal(
+                    controller: _scrollController,
+                    child: RepaintBoundary(
+                      child: TerminalSection(
+                        sectionKey: _sectionKeys['terminal']!,
+                      ),
                     ),
                   ),
 
                   const _SectionDivider(),
 
                   // 4 — Projects (isolated RepaintBoundary)
-                  RepaintBoundary(
-                    child: ProjectsSection(
-                      sectionKey: _sectionKeys['projects']!,
+                  ScrollReveal(
+                    controller: _scrollController,
+                    child: RepaintBoundary(
+                      child: ProjectsSection(
+                        sectionKey: _sectionKeys['projects']!,
+                      ),
                     ),
                   ),
 
                   const _SectionDivider(),
 
                   // 5 — About (isolated RepaintBoundary)
-                  RepaintBoundary(
-                    child: AboutSection(
-                      sectionKey: _sectionKeys['about']!,
+                  ScrollReveal(
+                    controller: _scrollController,
+                    child: RepaintBoundary(
+                      child: AboutSection(
+                        sectionKey: _sectionKeys['about']!,
+                      ),
                     ),
                   ),
 
                   const _SectionDivider(),
 
                   // 6 — Connect / Footer (isolated RepaintBoundary)
-                  RepaintBoundary(
-                    child: ConnectSection(
-                      sectionKey: _sectionKeys['contact']!,
+                  ScrollReveal(
+                    controller: _scrollController,
+                    child: RepaintBoundary(
+                      child: ConnectSection(
+                        sectionKey: _sectionKeys['contact']!,
+                      ),
                     ),
                   ),
                 ],

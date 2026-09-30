@@ -9,6 +9,38 @@
     content="Ahmed's portfolio — UE5/C++ game developer, CS/AIML student, and software engineer. Explore projects, play a game, and connect." />
   <base href="$FLUTTER_BASE_HREF" />
   <link rel="icon" type="image/png" href="favicon.png" />
+
+  <!-- Preconnect to Google Fonts domains for faster font handshake -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Optimized font stylesheet with font-display: swap to prevent FOIT -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Roboto:wght@400;600;700;900&display=swap" />
+
+  <!-- Critical Inline CSS: Prevents blank white screen, sets theme background immediately -->
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background-color: #EEF4F7;
+      color: #16324A;
+      font-family: 'Roboto', system-ui, -apple-system, sans-serif;
+      overflow-x: hidden;
+    }
+  </style>
+
+  <!-- Import map for Anime.js v4 -->
+  <script type="importmap">
+    {
+      "imports": {
+        "animejs": "./vendor/anime.esm.min.js"
+      }
+    }
+  </script>
+
+  <!-- Anime.js v4 Scroll-Linked Animation Module (deferred) -->
+  <script type="module" src="scroll_anim.js" defer></script>
 </head>
 <body>
   <script src="flutter_bootstrap.js" async></script>

@@ -1,321 +1,197 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../theme/glacier_dawn_theme.dart';
-import 'maximalist_decorations.dart';
-import 'border_glow_wrapper.dart';
 
-class ConnectSection extends StatelessWidget {
+class ConnectSection extends StatefulWidget {
   final GlobalKey sectionKey;
 
   const ConnectSection({super.key, required this.sectionKey});
 
-  Future<void> _openUrl(String url) async {
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
+  @override
+  State<ConnectSection> createState() => _ConnectSectionState();
+}
+
+class _ConnectSectionState extends State<ConnectSection> {
+  final _nameController = TextEditingController();
+  final _subjectController = TextEditingController();
+  final _messageController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _subjectController.dispose();
+    _messageController.dispose();
+    super.dispose();
+  }
+
+  void _handleSendEmail({bool useGmail = true}) {
+    final message = _messageController.text.trim();
+    if (message.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter a message before sending.'),
+          backgroundColor: Color(0xFFC24127),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+      return;
     }
+
+    final name = _nameController.text.trim();
+    final subject = _subjectController.text.trim().isEmpty
+        ? 'Project Inquiry'
+        : _subjectController.text.trim();
+    final sender = name.isEmpty ? 'Portfolio Visitor' : name;
+    final emailBody = '$message\n\n---\nFrom: $sender';
+
+    final gmailUrl = 'https://mail.google.com/mail/?view=cm&fs=1'
+        '&to=Mahmed9869@gmail.com'
+        '&su=${Uri.encodeComponent(subject)}'
+        '&body=${Uri.encodeComponent(emailBody)}';
+
+    final mailtoUrl = 'mailto:Mahmed9869@gmail.com'
+        '?subject=${Uri.encodeComponent(subject)}'
+        '&body=${Uri.encodeComponent(emailBody)}';
+
+    if (useGmail) {
+      // Synchronous launch without awaiting canLaunchUrl to preserve browser user activation
+      launchUrl(Uri.parse(gmailUrl), mode: LaunchMode.externalApplication);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Opening Gmail compose with your message...'),
+          backgroundColor: GlacierColors.textPrimary,
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 4),
+          action: SnackBarAction(
+            label: 'Use Mail App',
+            textColor: const Color(0xFFC24127),
+            onPressed: () {
+              launchUrl(
+                Uri.parse(mailtoUrl),
+                mode: LaunchMode.externalApplication,
+              );
+            },
+          ),
+        ),
+      );
+    } else {
+      launchUrl(Uri.parse(mailtoUrl), mode: LaunchMode.externalApplication);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Opening your default mail app...'),
+          backgroundColor: GlacierColors.textPrimary,
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 4),
+          action: SnackBarAction(
+            label: 'Open Gmail',
+            textColor: const Color(0xFFC24127),
+            onPressed: () {
+              launchUrl(
+                Uri.parse(gmailUrl),
+                mode: LaunchMode.externalApplication,
+              );
+            },
+          ),
+        ),
+      );
+    }
+  }
+
+  void _handleCopyMessage() {
+    final message = _messageController.text.trim();
+    final name = _nameController.text.trim();
+    final subject = _subjectController.text.trim().isEmpty
+        ? 'Project Inquiry'
+        : _subjectController.text.trim();
+    final sender = name.isEmpty ? 'Portfolio Visitor' : name;
+    final fullText =
+        'To: Mahmed9869@gmail.com\nSubject: $subject\n\n$message\n\nFrom: $sender';
+
+    Clipboard.setData(ClipboardData(text: fullText));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Message copied to clipboard! (Mahmed9869@gmail.com)'),
+        backgroundColor: GlacierColors.textPrimary,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final isDesktop = MediaQuery.of(context).size.width >= 768;
-    final hPad = isDesktop ? 80.0 : 24.0;
-    final vPad = isDesktop ? 80.0 : 48.0;
+    final hPad = isDesktop ? 64.0 : 24.0;
+    final vPad = isDesktop ? 96.0 : 64.0;
 
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        // Background decoration
-        const Positioned.fill(
-          child: DotGridPattern(
-            spacing: 30,
-            dotRadius: 1.2,
-            color: Color(0x125A87AC),
-          ),
-        ),
-        const Positioned(
-          top: -40,
-          left: 0,
-          right: 0,
-          child: Center(
-            child: GlowOrb(
-              size: 600,
-              color: GlacierColors.accentCyan,
-              opacity: 0.08,
-            ),
-          ),
-        ),
-        const Positioned(
-          bottom: -60,
-          left: -80,
-          child: GlowOrb(
-            size: 350,
-            color: GlacierColors.accentViolet,
-            opacity: 0.12,
-          ),
-        ),
-        // Content
-        Container(
-          key: sectionKey,
-          padding: EdgeInsets.fromLTRB(hPad, vPad, hPad, 40),
-          child: Column(
-            children: [
-              // Eyebrow label
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                decoration: BoxDecoration(
-                  color: GlacierColors.accentCyan.withOpacity(0.10),
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: GlacierColors.accentCyan.withOpacity(0.30),
-                    width: 1,
-                  ),
-                ),
-                child: const Text(
-                  '📬  GET IN TOUCH',
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
-                    color: GlacierColors.accentCyan,
-                    letterSpacing: 1.8,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              const _GradientSectionHeading(text: "Let's Connect"),
-              const SizedBox(height: 16),
-              ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 520),
-                child: Text(
-                  'Interested in game development, AI systems, and practical software projects — feel free to connect.',
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: GlacierColors.textSecondary,
-                        height: 1.7,
-                        fontSize: 16,
+    return Container(
+      key: widget.sectionKey,
+      width: double.infinity,
+      color: Colors.transparent,
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1200),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: hPad, vertical: vPad),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (isDesktop)
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Left Column: Info & Links
+                      Expanded(
+                        flex: 11,
+                        child: _buildInfoColumn(isDesktop: true),
                       ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              const SizedBox(height: 48),
-
-              // Contact cards row
-              if (isDesktop)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _ContactCard(
-                      icon: Icons.code_rounded,
-                      label: 'GitHub',
-                      handle: '@Fusionforge19',
-                      accentColor: GlacierColors.lightBlue,
-                      onTap: () => _openUrl('https://github.com/Fusionforge19'),
-                    ),
-                    const SizedBox(width: 20),
-                    _ContactCard(
-                      icon: Icons.work_outline_rounded,
-                      label: 'LinkedIn',
-                      handle: 'ahmed-shaikh',
-                      accentColor: GlacierColors.mutedBlue,
-                      onTap: () => _openUrl(
-                          'https://www.linkedin.com/in/ahmed-shaikh-511499316/'),
-                    ),
-                    const SizedBox(width: 20),
-                    _ContactCard(
-                      icon: Icons.email_outlined,
-                      label: 'Email',
-                      handle: 'mahmed9869@gmail.com',
-                      accentColor: GlacierColors.darkBlue,
-                      onTap: () => _openUrl('mailto:mahmed9869@gmail.com'),
-                    ),
-                  ],
-                )
-              else
-                Column(
-                  children: [
-                    _ContactCard(
-                      icon: Icons.code_rounded,
-                      label: 'GitHub',
-                      handle: '@Fusionforge19',
-                      accentColor: GlacierColors.lightBlue,
-                      onTap: () => _openUrl('https://github.com/Fusionforge19'),
-                    ),
-                    const SizedBox(height: 16),
-                    _ContactCard(
-                      icon: Icons.work_outline_rounded,
-                      label: 'LinkedIn',
-                      handle: 'ahmed-shaikh',
-                      accentColor: GlacierColors.mutedBlue,
-                      onTap: () => _openUrl(
-                          'https://www.linkedin.com/in/ahmed-shaikh-511499316/'),
-                    ),
-                    const SizedBox(height: 16),
-                    _ContactCard(
-                      icon: Icons.email_outlined,
-                      label: 'Email',
-                      handle: 'mahmed9869@gmail.com',
-                      accentColor: GlacierColors.darkBlue,
-                      onTap: () => _openUrl('mailto:mahmed9869@gmail.com'),
-                    ),
-                  ],
-                ),
-
-              const SizedBox(height: 48),
-
-              // Primary CTA buttons
-              Wrap(
-                spacing: 16,
-                runSpacing: 14,
-                alignment: WrapAlignment.center,
-                children: [
-                  _CTAButton(
-                    label: 'Connect on LinkedIn',
-                    icon: Icons.open_in_new,
-                    filled: true,
-                    onTap: () => _openUrl(
-                        'https://www.linkedin.com/in/ahmed-shaikh-511499316/'),
-                  ),
-                  const _CTAButton(
-                    label: 'Download Resume',
-                    icon: Icons.download_rounded,
-                    filled: false,
-                    onTap: openResume,
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 72),
-
-              // Footer
-              Container(
-                height: 1,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.transparent,
-                      Color(0x305A87AC),
-                      Colors.transparent,
+                      const SizedBox(width: 72),
+                      // Right Column: Contact Form
+                      Expanded(
+                        flex: 9,
+                        child: _buildFormColumn(),
+                      ),
+                    ],
+                  )
+                else
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildInfoColumn(isDesktop: false),
+                      const SizedBox(height: 56),
+                      _buildFormColumn(),
                     ],
                   ),
+
+                const SizedBox(height: 80),
+
+                // Divider and subtle footer
+                Container(
+                  height: 1,
+                  color: const Color(0x288FB8CC),
                 ),
-              ),
-              const SizedBox(height: 24),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ShaderMask(
-                    blendMode: BlendMode.srcIn,
-                    shaderCallback: (b) =>
-                        GlacierColors.accentGradient.createShader(b),
-                    child: const Text(
+                const SizedBox(height: 28),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
                       'Ahmed',
                       style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: -0.3,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: GlacierColors.textPrimary,
+                        letterSpacing: -0.2,
                       ),
                     ),
-                  ),
-                  Text(
-                    '  ·  © 2026. Built with Flutter.',
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: GlacierColors.textSecondary.withOpacity(0.7),
-                          fontSize: 12,
-                        ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-// ── Contact card ──────────────────────────────────────────────────────────────
-
-class _ContactCard extends StatefulWidget {
-  final IconData icon;
-  final String label;
-  final String handle;
-  final Color accentColor;
-  final VoidCallback onTap;
-
-  const _ContactCard({
-    required this.icon,
-    required this.label,
-    required this.handle,
-    required this.accentColor,
-    required this.onTap,
-  });
-
-  @override
-  State<_ContactCard> createState() => _ContactCardState();
-}
-
-class _ContactCardState extends State<_ContactCard> {
-  bool _hovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return BorderGlowWrapper(
-      backgroundColor: GlacierColors.cardSurface,
-      glowColor: widget.accentColor,
-      colors: [widget.accentColor, GlacierColors.mutedBlue, GlacierColors.lightBlue],
-      borderRadius: 18,
-      glowRadius: 30,
-      glowIntensity: 1.0,
-      edgeSensitivity: 30,
-      child: MouseRegion(
-        onEnter: (_) => setState(() => _hovered = true),
-        onExit: (_) => setState(() => _hovered = false),
-        child: GestureDetector(
-          onTap: widget.onTap,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            transform: Matrix4.translationValues(0, _hovered ? -5 : 0, 0),
-            constraints: const BoxConstraints(minWidth: 180),
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: widget.accentColor.withOpacity(_hovered ? 0.18 : 0.10),
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: widget.accentColor.withOpacity(_hovered ? 0.50 : 0.25),
-                      width: 1.5,
+                    Text(
+                      '© 2026. Built with Flutter.',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: GlacierColors.textSecondary.withOpacity(0.7),
+                      ),
                     ),
-                  ),
-                  child: Icon(
-                    widget.icon,
-                    size: 22,
-                    color: widget.accentColor,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Text(
-                  widget.label,
-                  style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w800,
-                    color: _hovered ? widget.accentColor : GlacierColors.textPrimary,
-                    letterSpacing: 0.3,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  widget.handle,
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: GlacierColors.textSecondary.withOpacity(0.8),
-                    fontWeight: FontWeight.w500,
-                  ),
+                  ],
                 ),
               ],
             ),
@@ -324,186 +200,408 @@ class _ContactCardState extends State<_ContactCard> {
       ),
     );
   }
+
+  Widget _buildInfoColumn({required bool isDesktop}) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Main Heading
+        Text(
+          'Want to talk about a project?',
+          style: TextStyle(
+            fontFamily: 'Playfair Display',
+            fontFamilyFallback: const ['Georgia', 'Cambria', 'serif'],
+            fontSize: isDesktop ? 50 : 34,
+            fontWeight: FontWeight.w700,
+            color: GlacierColors.textPrimary,
+            height: 1.15,
+            letterSpacing: -0.6,
+          ),
+        ),
+        const SizedBox(height: 18),
+
+        // Subtitle
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 480),
+          child: const Text(
+            'Email is best. GitHub, LinkedIn, and Itch.io are below too.',
+            style: TextStyle(
+              fontSize: 16,
+              height: 1.6,
+              color: GlacierColors.textSecondary,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ),
+        const SizedBox(height: 40),
+
+        // Links List (Minimalist Table Format)
+        Container(
+          decoration: const BoxDecoration(
+            border: Border(
+              top: BorderSide(color: Color(0x288FB8CC), width: 1),
+            ),
+          ),
+          child: const Column(
+            children: [
+              _ContactLinkRow(
+                label: 'Email',
+                value: 'Mahmed9869@gmail.com',
+                url:
+                    'https://mail.google.com/mail/?view=cm&fs=1&to=Mahmed9869@gmail.com',
+              ),
+              _ContactLinkRow(
+                label: 'GitHub',
+                value: 'Fusionforge19',
+                url: 'https://github.com/Fusionforge19',
+              ),
+              _ContactLinkRow(
+                label: 'LinkedIn',
+                value: 'Ahmed Shaikh',
+                url: 'https://www.linkedin.com/in/ahmed-shaikh-511499316/',
+              ),
+              _ContactLinkRow(
+                label: 'Itch.io',
+                value: 'noname0019',
+                url: 'https://noname0019.itch.io',
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFormColumn() {
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _UnderlineField(
+            label: 'Name',
+            hintText: 'Your name',
+            controller: _nameController,
+          ),
+          const SizedBox(height: 32),
+          _UnderlineField(
+            label: 'Subject',
+            hintText: 'What are you working on?',
+            controller: _subjectController,
+          ),
+          const SizedBox(height: 32),
+          _UnderlineField(
+            label: 'Message',
+            hintText: 'A few plain sentences is perfect.',
+            controller: _messageController,
+            maxLines: 4,
+          ),
+          const SizedBox(height: 36),
+          Wrap(
+            spacing: 12,
+            runSpacing: 10,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              _SubmitButton(
+                onPressed: () => _handleSendEmail(useGmail: true),
+              ),
+              _SecondaryActionButton(
+                label: 'Mail App (mailto)',
+                icon: Icons.mail_outline_rounded,
+                onPressed: () => _handleSendEmail(useGmail: false),
+              ),
+              _SecondaryActionButton(
+                label: 'Copy',
+                icon: Icons.copy_rounded,
+                onPressed: _handleCopyMessage,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 }
 
-// ── CTA Button ────────────────────────────────────────────────────────────────
+// ── Contact Link Row ─────────────────────────────────────────────────────────
 
-class _CTAButton extends StatefulWidget {
+class _ContactLinkRow extends StatefulWidget {
   final String label;
-  final IconData icon;
-  final bool filled;
-  final VoidCallback onTap;
+  final String value;
+  final String url;
 
-  const _CTAButton({
+  const _ContactLinkRow({
     required this.label,
-    required this.icon,
-    required this.filled,
-    required this.onTap,
+    required this.value,
+    required this.url,
   });
 
   @override
-  State<_CTAButton> createState() => _CTAButtonState();
+  State<_ContactLinkRow> createState() => _ContactLinkRowState();
 }
 
-class _CTAButtonState extends State<_CTAButton> {
-  bool _hovered = false;
+class _ContactLinkRowState extends State<_ContactLinkRow> {
+  bool _isHovered = false;
+
+  void _open() {
+    final uri = Uri.parse(widget.url);
+    launchUrl(uri, mode: LaunchMode.externalApplication);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(color: Color(0x288FB8CC), width: 1),
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 18),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            widget.label,
+            style: const TextStyle(
+              fontSize: 15,
+              color: GlacierColors.textSecondary,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          MouseRegion(
+            cursor: SystemMouseCursors.click,
+            onEnter: (_) => setState(() => _isHovered = true),
+            onExit: (_) => setState(() => _isHovered = false),
+            child: GestureDetector(
+              onTap: _open,
+              child: AnimatedDefaultTextStyle(
+                duration: const Duration(milliseconds: 180),
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w500,
+                  color: _isHovered
+                      ? const Color(0xFFC24127)
+                      : GlacierColors.textPrimary,
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(widget.value),
+                    const SizedBox(width: 4),
+                    AnimatedSlide(
+                      duration: const Duration(milliseconds: 180),
+                      offset:
+                          _isHovered ? const Offset(0.12, -0.12) : Offset.zero,
+                      child: const Text('↗'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ── Underline Form Field ──────────────────────────────────────────────────────
+
+class _UnderlineField extends StatelessWidget {
+  final String label;
+  final String hintText;
+  final TextEditingController controller;
+  final int maxLines;
+
+  const _UnderlineField({
+    required this.label,
+    required this.hintText,
+    required this.controller,
+    this.maxLines = 1,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label.toUpperCase(),
+          style: const TextStyle(
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0.8,
+            color: GlacierColors.textSecondary,
+          ),
+        ),
+        const SizedBox(height: 6),
+        TextField(
+          controller: controller,
+          maxLines: maxLines,
+          style: const TextStyle(
+            fontSize: 16,
+            color: GlacierColors.textPrimary,
+            fontWeight: FontWeight.w400,
+          ),
+          cursorColor: const Color(0xFFC24127),
+          decoration: InputDecoration(
+            hintText: hintText,
+            hintStyle: const TextStyle(
+              color: GlacierColors.textMuted,
+              fontSize: 16,
+              fontWeight: FontWeight.w400,
+            ),
+            isDense: true,
+            contentPadding: const EdgeInsets.symmetric(vertical: 10),
+            enabledBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Color(0x3016324A), width: 1.0),
+            ),
+            focusedBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Color(0xFFC24127), width: 1.5),
+            ),
+            border: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Color(0x3016324A), width: 1.0),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ── Rust Red Rectangular Submit Button ────────────────────────────────────────
+
+class _SubmitButton extends StatefulWidget {
+  final VoidCallback onPressed;
+
+  const _SubmitButton({required this.onPressed});
+
+  @override
+  State<_SubmitButton> createState() => _SubmitButtonState();
+}
+
+class _SubmitButtonState extends State<_SubmitButton> {
+  bool _isHovered = false;
 
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
       child: GestureDetector(
-        onTap: widget.onTap,
+        onTap: widget.onPressed,
         child: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 15),
+          duration: const Duration(milliseconds: 180),
+          padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 14),
           decoration: BoxDecoration(
-            gradient: widget.filled ? GlacierColors.accentGradient : null,
-            color: widget.filled
-                ? null
-                : GlacierColors.cardSurface.withOpacity(0.88),
-            borderRadius: BorderRadius.circular(12),
-            border: widget.filled
-                ? null
-                : Border.all(
-                    color: _hovered
-                        ? GlacierColors.mutedBlue
-                        : GlacierColors.mutedBlue.withOpacity(0.35),
-                    width: 1.5,
-                  ),
-            boxShadow: [
-              BoxShadow(
-                color: GlacierColors.mutedBlue
-                    .withOpacity(_hovered ? 0.25 : 0.08),
-                blurRadius: _hovered ? 20 : 8,
-                spreadRadius: _hovered ? 1 : 0,
+            color:
+                _isHovered ? const Color(0xFFA9331D) : const Color(0xFFC24127),
+            boxShadow: _isHovered
+                ? [
+                    BoxShadow(
+                      color: const Color(0xFFC24127).withOpacity(0.25),
+                      blurRadius: 14,
+                      offset: const Offset(0, 4),
+                    ),
+                  ]
+                : [],
+          ),
+          child: const Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Send email',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0.2,
+                ),
+              ),
+              SizedBox(width: 6),
+              Text(
+                '↗',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ── Secondary Action Button (Mail App / Copy) ─────────────────────────────────
+
+class _SecondaryActionButton extends StatefulWidget {
+  final String label;
+  final IconData icon;
+  final VoidCallback onPressed;
+
+  const _SecondaryActionButton({
+    required this.label,
+    required this.icon,
+    required this.onPressed,
+  });
+
+  @override
+  State<_SecondaryActionButton> createState() => _SecondaryActionButtonState();
+}
+
+class _SecondaryActionButtonState extends State<_SecondaryActionButton> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: GestureDetector(
+        onTap: widget.onPressed,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 180),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+          decoration: BoxDecoration(
+            color: _isHovered
+                ? GlacierColors.textPrimary.withOpacity(0.06)
+                : Colors.transparent,
+            border: Border.all(
+              color: _isHovered
+                  ? GlacierColors.textPrimary
+                  : const Color(0x3016324A),
+              width: 1,
+            ),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
                 widget.icon,
-                size: 17,
-                color: widget.filled
-                    ? Colors.white
-                    : (_hovered
-                        ? GlacierColors.mutedBlue
-                        : GlacierColors.textPrimary),
+                size: 15,
+                color: _isHovered
+                    ? GlacierColors.textPrimary
+                    : GlacierColors.textSecondary,
               ),
-              const SizedBox(width: 9),
+              const SizedBox(width: 6),
               Text(
                 widget.label,
                 style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
-                  color: widget.filled
-                      ? Colors.white
-                      : (_hovered
-                          ? GlacierColors.mutedBlue
-                          : GlacierColors.textPrimary),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: _isHovered
+                      ? GlacierColors.textPrimary
+                      : GlacierColors.textSecondary,
                 ),
               ),
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-// ── Social icon button ────────────────────────────────────────────────────────
-
-class _SocialIconButton extends StatefulWidget {
-  final Widget icon;
-  final String tooltip;
-  final VoidCallback onTap;
-
-  const _SocialIconButton({
-    required this.icon,
-    required this.tooltip,
-    required this.onTap,
-  });
-
-  @override
-  State<_SocialIconButton> createState() => _SocialIconButtonState();
-}
-
-class _SocialIconButtonState extends State<_SocialIconButton> {
-  bool _hovered = false;
-
-  @override
-  Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      child: Tooltip(
-        message: widget.tooltip,
-        child: GestureDetector(
-          onTap: widget.onTap,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 180),
-            width: 48,
-            height: 48,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: _hovered
-                  ? GlacierColors.mutedBlue.withOpacity(0.12)
-                  : Colors.transparent,
-              border: Border.all(
-                color: _hovered
-                    ? GlacierColors.mutedBlue
-                    : GlacierColors.textSecondary.withOpacity(0.3),
-                width: 1.5,
-              ),
-              boxShadow: _hovered
-                  ? [
-                      BoxShadow(
-                        color: GlacierColors.mutedBlue.withOpacity(0.20),
-                        blurRadius: 14,
-                      )
-                    ]
-                  : [],
-            ),
-            child: Center(
-              child: IconTheme(
-                data: IconThemeData(
-                  color: _hovered
-                      ? GlacierColors.mutedBlue
-                      : GlacierColors.textPrimary,
-                  size: 20,
-                ),
-                child: widget.icon,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// ── Shared gradient heading ───────────────────────────────────────────────────
-
-class _GradientSectionHeading extends StatelessWidget {
-  final String text;
-
-  const _GradientSectionHeading({required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return ShaderMask(
-      blendMode: BlendMode.srcIn,
-      shaderCallback: (bounds) =>
-          GlacierColors.accentGradient.createShader(bounds),
-      child: Text(
-        text,
-        style: Theme.of(context).textTheme.displaySmall?.copyWith(
-              fontWeight: FontWeight.w800,
-            ),
-        textAlign: TextAlign.center,
       ),
     );
   }
