@@ -1,0 +1,185 @@
+@import "tailwindcss";
+
+@theme {
+  --color-bg:           #EEF8FD;
+  --color-bg-alt:       #E0F1FA;
+  --color-surface:      rgba(255, 255, 255, 0.65);
+  --color-sky:          #BFE3F5;
+  --color-powder:       #B6DCEB;
+  --color-glacier:      #8EC5DE;
+  --color-glacier-deep: #2F86B3;
+  --color-ink:          #12324A;
+  --color-ink-soft:     #456A82;
+  --color-accent-pop:   #FFB4A2;
+
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
+
+  --shadow-glacier-sm:  0 2px 10px rgba(47, 134, 179, 0.08);
+  --shadow-glacier-md:  0 4px 20px rgba(47, 134, 179, 0.12);
+  --shadow-glacier-lg:  0 8px 30px rgba(47, 134, 179, 0.15);
+}
+
+/* ─── CSS Custom Properties for Dynamic Theming ────────────────────────── */
+:root {
+  --bg:           #EEF8FD;   /* page background, very light sky */
+  --bg-alt:       #E0F1FA;   /* alternate section background */
+  --surface:      rgba(255, 255, 255, 0.65); /* cards, glass */
+  --sky:          #BFE3F5;   /* sky blue, big soft areas */
+  --powder:       #B6DCEB;   /* powder blue, borders, chips */
+  --glacier:      #8EC5DE;   /* glacier blue, accents, glows */
+  --glacier-deep: #2F86B3;   /* buttons, links, active states, white text on it passes AA */
+  --ink:          #12324A;   /* headings */
+  --ink-soft:     #456A82;   /* body text */
+  --accent-pop:   #FFB4A2;   /* tiny peach accent, used sparingly */
+
+  --card-bg:      rgba(255, 255, 255, 0.75);
+  --card-border:  rgba(182, 220, 235, 0.55);
+  --card-shadow:  rgba(47, 134, 179, 0.12);
+
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body:    'Inter', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Fira Code', monospace;
+}
+
+html.dark {
+  --bg:           #132737;   /* softer slate-blue, not pitch-black */
+  --bg-alt:       #183244;
+  --surface:      rgba(24, 50, 68, 0.65);
+  --sky:          #2A4D66;
+  --powder:       #375F7D;
+  --glacier:      #5E9EBF;
+  --glacier-deep: #479DC7;
+  --ink:          #F0F8FC;
+  --ink-soft:     #B8D9EC;
+  --accent-pop:   #FFB4A2;
+
+  --card-bg:      rgba(24, 50, 68, 0.75);
+  --card-border:  rgba(94, 158, 191, 0.25);
+  --card-shadow:  rgba(15, 30, 42, 0.35);
+}
+
+/* ─── Base Styles ───────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* Let Lenis handle smooth scrolling; do not set scroll-behavior or overflow on html */
+html {
+  background-color: var(--bg);
+}
+
+body {
+  overflow-x: clip;
+  background-color: var(--bg);
+  color: var(--ink-soft);
+  font-family: var(--font-body, 'Inter', system-ui, sans-serif);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ─── Clean Glassmorphism Card (subtle, no heavy neon) ─────────────────── */
+.glass-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 4px 20px var(--card-shadow);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* ─── Gradient Text Utility ─────────────────────────────────────────────── */
+.gradient-text {
+  background: linear-gradient(135deg, var(--ink) 0%, var(--glacier-deep) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+html.dark .gradient-text {
+  background: linear-gradient(135deg, var(--ink) 0%, var(--glacier) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Very subtle noise grain (2% opacity) ─────────────────────────────── */
+.noise-overlay::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.02;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* ─── Scroll Reveal Animation Base ─────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ─── Custom Scrollbar ──────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-alt); }
+::-webkit-scrollbar-thumb {
+  background: var(--powder);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--glacier); }
+
+/* ─── Selection Color ───────────────────────────────────────────────────── */
+::selection {
+  background: rgba(142, 197, 222, 0.4);
+  color: var(--ink);
+}
+
+/* ─── Marquee strip ─────────────────────────────────────────────────────── */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 35s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ─── Soft glow pulse (subtle, airy) ────────────────────────────────────── */
+@keyframes softGlow {
+  0%, 100% { opacity: 0.25; transform: scale(1); }
+  50%      { opacity: 0.45; transform: scale(1.04); }
+}
+
+.animate-soft-glow {
+  animation: softGlow 6s ease-in-out infinite;
+}
+
+/* ─── Accessible Focus Ring ─────────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--glacier-deep);
+  outline-offset: 2px;
+}
