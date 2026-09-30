@@ -18,10 +18,7 @@ export default function ProjectsSection() {
   return (
     <section
       id="projects"
-      className="py-24 relative"
-      style={{
-        background: 'linear-gradient(180deg, #E0F1FA 0%, #EEF8FD 100%)',
-      }}
+      className="py-24 relative bg-[#E0F1FA] dark:bg-[#183244]"
     >
       <div
         ref={revealRef as React.RefObject<HTMLDivElement>}
@@ -29,7 +26,7 @@ export default function ProjectsSection() {
       >
         {/* Header */}
         <div className="text-center mb-12">
-          <span className="inline-block px-3.5 py-1 rounded-full border border-[var(--powder)] bg-white/80 text-[var(--glacier-deep)] text-xs font-mono font-semibold tracking-wider uppercase mb-3 shadow-xs">
+          <span className="inline-block px-3.5 py-1 rounded-full border border-[var(--powder)] bg-white/80 dark:bg-[rgba(24,50,68,0.8)] text-[var(--glacier-deep)] text-xs font-mono font-semibold tracking-wider uppercase mb-3 shadow-xs">
             Flagship Projects
           </span>
           <h2 className="font-display font-bold text-3xl md:text-4xl text-[var(--ink)] mb-3">
@@ -49,7 +46,7 @@ export default function ProjectsSection() {
               className={`px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all cursor-pointer ${
                 activeTag === tag
                   ? 'bg-[var(--glacier-deep)] text-white border-[var(--glacier-deep)] shadow-sm'
-                  : 'bg-white/80 border-[var(--powder)] text-[var(--ink)] hover:border-[var(--glacier-deep)] hover:text-[var(--glacier-deep)]'
+                  : 'bg-white/80 dark:bg-[rgba(24,50,68,0.7)] border-[var(--powder)] text-[var(--ink)] hover:border-[var(--glacier-deep)] hover:text-[var(--glacier-deep)]'
               }`}
             >
               {tag}
@@ -74,14 +71,14 @@ function ProjectCard({ project, delay }: { project: Project; delay: number }) {
   return (
     <article
       ref={ref as React.RefObject<HTMLElement>}
-      className="bg-white/90 border border-[var(--powder)] rounded-2xl p-6 flex flex-col gap-4 shadow-[0_4px_20px_rgba(47,134,179,0.08)] hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(47,134,179,0.14)] transition-all duration-200"
+      className="bg-white/90 dark:bg-[rgba(24,50,68,0.85)] border border-[var(--powder)] dark:border-[rgba(94,158,191,0.25)] rounded-2xl p-6 flex flex-col gap-4 shadow-[0_4px_20px_rgba(47,134,179,0.08)] hover:-translate-y-1 hover:shadow-[0_8px_30px_rgba(47,134,179,0.14)] transition-all duration-200"
       style={{ transitionDelay: `${delay}ms` }}
     >
       {/* Icon + status chip */}
       <div className="flex items-start justify-between">
         <span className="text-3xl select-none">{project.icon}</span>
         <span
-          className="px-2.5 py-0.5 rounded-full text-[11px] font-bold border bg-[#EEF8FD] text-[var(--glacier-deep)] border-[var(--powder)]"
+          className="px-2.5 py-0.5 rounded-full text-[11px] font-bold border bg-[var(--bg-alt)] text-[var(--glacier-deep)] border-[var(--powder)]"
         >
           {project.statusChip}
         </span>
@@ -102,7 +99,7 @@ function ProjectCard({ project, delay }: { project: Project; delay: number }) {
         {project.tags.map((tag) => (
           <span
             key={tag}
-            className="px-2 py-0.5 rounded-md text-[11px] font-mono font-medium bg-[#EEF8FD] text-[var(--ink)] border border-[var(--powder)]/70"
+            className="px-2 py-0.5 rounded-md text-[11px] font-mono font-medium bg-[var(--bg-alt)] text-[var(--ink)] border border-[var(--powder)]/70"
           >
             {tag}
           </span>

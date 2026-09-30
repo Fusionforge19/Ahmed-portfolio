@@ -7,21 +7,18 @@ const STAT_CARDS = [
     title: 'Current Focus',
     subtitle: 'Game development and AI systems, with practical project work in interactive design.',
     badge: 'Active',
-    color: '#2F86B3',
   },
   {
     icon: '📚',
     title: 'Computer Science',
     subtitle: 'Bachelor of Engineering in Computer Science, Mumbai University — expected 2028.',
     badge: 'Current',
-    color: '#2F86B3',
   },
   {
     icon: '⚡',
     title: 'Project Experience',
     subtitle: 'Built a full-stack marketplace MVP and won a hackathon for a real-time canteen kiosk system.',
     badge: 'Verified',
-    color: '#2F86B3',
   },
 ] as const;
 
@@ -31,10 +28,7 @@ export default function AboutSection() {
   return (
     <section
       id="about"
-      className="py-24 relative overflow-hidden"
-      style={{
-        background: 'linear-gradient(180deg, #EEF8FD 0%, #E0F1FA 100%)',
-      }}
+      className="py-24 relative overflow-hidden bg-[#EEF8FD] dark:bg-[#132737]"
     >
       {/* Soft airy blurred glow */}
       <div
@@ -49,7 +43,7 @@ export default function AboutSection() {
       >
         {/* Header */}
         <div className="text-center mb-14">
-          <span className="inline-block px-3.5 py-1 rounded-full border border-[var(--powder)] bg-white/80 text-[var(--glacier-deep)] text-xs font-mono font-semibold tracking-wider uppercase mb-3 shadow-xs">
+          <span className="inline-block px-3.5 py-1 rounded-full border border-[var(--powder)] bg-white/80 dark:bg-[rgba(24,50,68,0.8)] text-[var(--glacier-deep)] text-xs font-mono font-semibold tracking-wider uppercase mb-3 shadow-xs">
             About Me
           </span>
           <h2 className="font-display font-bold text-3xl md:text-4xl text-[var(--ink)]">
@@ -73,13 +67,13 @@ export default function AboutSection() {
             </p>
 
             {/* IEEE card */}
-            <div className="bg-white/85 border border-[var(--powder)] rounded-2xl p-4 md:p-5 flex items-center gap-4 shadow-[0_4px_16px_rgba(47,134,179,0.06)]">
-              <span className="text-2xl p-2 rounded-xl bg-[#E0F1FA]">⚙️</span>
+            <div className="bg-white/85 dark:bg-[rgba(24,50,68,0.85)] border border-[var(--powder)] dark:border-[rgba(94,158,191,0.25)] rounded-2xl p-4 md:p-5 flex items-center gap-4 shadow-[0_4px_16px_rgba(47,134,179,0.06)]">
+              <span className="text-2xl p-2 rounded-xl bg-[var(--bg-alt)]">⚙️</span>
               <div>
                 <p className="font-display font-bold text-[var(--ink)] text-sm md:text-base">IEEE Social Media Joint Head</p>
                 <p className="text-[var(--ink-soft)] text-xs mt-0.5">Managing technical community communications &amp; digital content strategy.</p>
               </div>
-              <span className="ml-auto px-2.5 py-0.5 rounded-full text-[10px] font-bold border border-[var(--powder)] text-[var(--glacier-deep)] bg-white">
+              <span className="ml-auto px-2.5 py-0.5 rounded-full text-[10px] font-bold border border-[var(--powder)] text-[var(--glacier-deep)] bg-[var(--bg-alt)]">
                 Active
               </span>
             </div>
@@ -98,7 +92,7 @@ export default function AboutSection() {
                     {skills.map((skill) => (
                       <span
                         key={skill}
-                        className="px-3 py-1 rounded-lg text-xs font-semibold bg-white/90 text-[var(--ink)] border border-[var(--powder)] hover:border-[var(--glacier-deep)] transition-colors shadow-xs"
+                        className="px-3 py-1 rounded-lg text-xs font-semibold bg-white/90 dark:bg-[rgba(24,50,68,0.85)] text-[var(--ink)] border border-[var(--powder)] dark:border-[rgba(94,158,191,0.25)] hover:border-[var(--glacier-deep)] transition-colors shadow-xs"
                       >
                         {skill}
                       </span>
@@ -114,10 +108,10 @@ export default function AboutSection() {
             {STAT_CARDS.map((card) => (
               <div
                 key={card.title}
-                className="bg-white/90 border border-[var(--powder)] rounded-2xl p-5 flex gap-4 items-start shadow-[0_4px_16px_rgba(47,134,179,0.06)] hover:-translate-y-0.5 transition-transform"
+                className="bg-white/90 dark:bg-[rgba(24,50,68,0.85)] border border-[var(--powder)] dark:border-[rgba(94,158,191,0.25)] rounded-2xl p-5 flex gap-4 items-start shadow-[0_4px_16px_rgba(47,134,179,0.06)] hover:-translate-y-0.5 transition-transform"
               >
                 <div
-                  className="w-11 h-11 rounded-xl flex items-center justify-center text-xl flex-shrink-0 bg-[#EEF8FD] border border-[#B6DCEB]"
+                  className="w-11 h-11 rounded-xl flex items-center justify-center text-xl flex-shrink-0 bg-[var(--bg-alt)] border border-[var(--powder)]"
                 >
                   {card.icon}
                 </div>
@@ -125,7 +119,7 @@ export default function AboutSection() {
                   <div className="flex items-center gap-2 mb-1">
                     <p className="font-display font-bold text-[var(--ink)] text-sm truncate">{card.title}</p>
                     <span
-                      className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[#E0F1FA] text-[#2F86B3] border border-[#B6DCEB]"
+                      className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-[var(--bg-alt)] text-[var(--glacier-deep)] border border-[var(--powder)]"
                     >
                       {card.badge}
                     </span>
@@ -138,7 +132,7 @@ export default function AboutSection() {
         </div>
 
         {/* Clean Tech marquee strip */}
-        <div className="relative overflow-hidden py-3 border-y border-[var(--powder)] bg-white/60 rounded-xl">
+        <div className="relative overflow-hidden py-3 border-y border-[var(--powder)] bg-white/60 dark:bg-[rgba(24,50,68,0.5)] rounded-xl">
           <div className="marquee-track">
             {[...TECH_MARQUEE, ...TECH_MARQUEE].map((tech, i) => (
               <span

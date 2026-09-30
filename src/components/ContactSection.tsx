@@ -79,13 +79,14 @@ export default function ContactSection() {
     },
   ];
 
+  /* Shared input styles */
+  const inputCls =
+    'w-full bg-[#F8FCFE] dark:bg-[rgba(20,40,56,0.85)] border border-[var(--powder)] dark:border-[rgba(94,158,191,0.25)] rounded-xl px-4 py-3 text-sm text-[var(--ink)] placeholder-[var(--ink-soft)]/50 focus:border-[var(--glacier-deep)] focus:ring-1 focus:ring-[var(--glacier-deep)] outline-none transition-all';
+
   return (
     <section
       id="contact"
-      className="py-24 relative overflow-hidden"
-      style={{
-        background: 'linear-gradient(180deg, #EEF8FD 0%, #E0F1FA 100%)',
-      }}
+      className="py-24 relative overflow-hidden bg-[#EEF8FD] dark:bg-[#132737]"
     >
       {/* Soft blurred glow */}
       <div
@@ -102,7 +103,7 @@ export default function ContactSection() {
           {/* Left Column: Info & Minimalist Table */}
           <div className="lg:col-span-6 space-y-8">
             <div>
-              <span className="inline-block px-3.5 py-1 rounded-full border border-[var(--powder)] bg-white/80 text-[var(--glacier-deep)] text-xs font-mono font-semibold tracking-wider uppercase mb-3 shadow-xs">
+              <span className="inline-block px-3.5 py-1 rounded-full border border-[var(--powder)] bg-white/80 dark:bg-[rgba(24,50,68,0.8)] text-[var(--glacier-deep)] text-xs font-mono font-semibold tracking-wider uppercase mb-3 shadow-xs">
                 Get In Touch
               </span>
               <h2
@@ -112,7 +113,7 @@ export default function ContactSection() {
                 Want to talk about a project?
               </h2>
               <p className="text-[var(--ink-soft)] text-base md:text-lg leading-relaxed max-w-md">
-                Email is best. GitHub, LinkedIn, and Itch.io are below too. Whether it’s gameplay systems, UE5, C++, or modern web projects — let&apos;s build something great.
+                Email is best. GitHub, LinkedIn, and Itch.io are below too. Whether it&apos;s gameplay systems, UE5, C++, or modern web projects — let&apos;s build something great.
               </p>
             </div>
 
@@ -147,7 +148,7 @@ export default function ContactSection() {
 
           {/* Right Column: Contact Form */}
           <div className="lg:col-span-6">
-            <div className="bg-white/90 border border-[var(--powder)] rounded-3xl p-8 md:p-10 shadow-[0_8px_30px_rgba(47,134,179,0.10)]">
+            <div className="bg-white/90 dark:bg-[rgba(24,50,68,0.85)] border border-[var(--powder)] dark:border-[rgba(94,158,191,0.25)] rounded-3xl p-8 md:p-10 shadow-[0_8px_30px_rgba(47,134,179,0.10)]">
               <h3 className="font-display font-bold text-xl text-[var(--ink)] mb-6">
                 Send a Message
               </h3>
@@ -164,7 +165,7 @@ export default function ContactSection() {
                     placeholder="Your name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full bg-[#F8FCFE] border border-[var(--powder)] rounded-xl px-4 py-3 text-sm text-[var(--ink)] placeholder-[var(--ink-soft)]/50 focus:border-[var(--glacier-deep)] focus:ring-1 focus:ring-[var(--glacier-deep)] outline-none transition-all"
+                    className={inputCls}
                   />
                 </div>
 
@@ -179,7 +180,7 @@ export default function ContactSection() {
                     placeholder="What are you working on?"
                     value={subject}
                     onChange={(e) => setSubject(e.target.value)}
-                    className="w-full bg-[#F8FCFE] border border-[var(--powder)] rounded-xl px-4 py-3 text-sm text-[var(--ink)] placeholder-[var(--ink-soft)]/50 focus:border-[var(--glacier-deep)] focus:ring-1 focus:ring-[var(--glacier-deep)] outline-none transition-all"
+                    className={inputCls}
                   />
                 </div>
 
@@ -194,7 +195,7 @@ export default function ContactSection() {
                     placeholder="A few plain sentences is perfect."
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    className="w-full bg-[#F8FCFE] border border-[var(--powder)] rounded-xl px-4 py-3 text-sm text-[var(--ink)] placeholder-[var(--ink-soft)]/50 focus:border-[var(--glacier-deep)] focus:ring-1 focus:ring-[var(--glacier-deep)] outline-none transition-all resize-none"
+                    className={`${inputCls} resize-none`}
                   />
                 </div>
 
@@ -212,7 +213,7 @@ export default function ContactSection() {
                   <button
                     type="button"
                     onClick={() => handleSend(false)}
-                    className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border-2 border-[var(--glacier-deep)] bg-white text-[var(--glacier-deep)] text-sm font-semibold hover:bg-[#BFE3F5]/30 active:scale-95 transition-all cursor-pointer"
+                    className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border-2 border-[var(--glacier-deep)] bg-white dark:bg-transparent text-[var(--glacier-deep)] text-sm font-semibold hover:bg-[#BFE3F5]/30 active:scale-95 transition-all cursor-pointer"
                   >
                     <Mail size={15} />
                     Mail App
@@ -221,7 +222,7 @@ export default function ContactSection() {
                   <button
                     type="button"
                     onClick={handleCopy}
-                    className="inline-flex items-center gap-2 px-4 py-3 rounded-xl border border-[var(--powder)] bg-white text-[var(--ink)] text-sm font-semibold hover:border-[var(--glacier-deep)] hover:text-[var(--glacier-deep)] active:scale-95 transition-all ml-auto cursor-pointer"
+                    className="inline-flex items-center gap-2 px-4 py-3 rounded-xl border border-[var(--powder)] bg-white dark:bg-transparent text-[var(--ink)] text-sm font-semibold hover:border-[var(--glacier-deep)] hover:text-[var(--glacier-deep)] active:scale-95 transition-all ml-auto cursor-pointer"
                     title="Copy full drafted email to clipboard"
                   >
                     <Copy size={15} />
@@ -239,7 +240,7 @@ export default function ContactSection() {
         <div
           role="status"
           aria-live="polite"
-          className="fixed bottom-6 right-6 z-50 bg-white border border-[var(--glacier-deep)] px-5 py-3 rounded-2xl shadow-lg text-sm font-semibold text-[var(--ink)] flex items-center gap-3 animate-fade-up"
+          className="fixed bottom-6 right-6 z-50 bg-white dark:bg-[rgba(24,50,68,0.95)] border border-[var(--glacier-deep)] px-5 py-3 rounded-2xl shadow-lg text-sm font-semibold text-[var(--ink)] flex items-center gap-3"
         >
           <Check size={16} className="text-[var(--glacier-deep)]" />
           <span>{toast}</span>

@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* Tailwind v4: enable class-based dark mode so dark: utilities work */
+@custom-variant dark (&:where(.dark, .dark *));
+
+
 @theme {
   --color-bg:           #EEF8FD;
   --color-bg-alt:       #E0F1FA;
@@ -182,4 +186,58 @@ html.dark .gradient-text {
 :focus-visible {
   outline: 2px solid var(--glacier-deep);
   outline-offset: 2px;
+}
+
+/* --- Dark-mode overrides for hard-coded component colors --- */
+
+/* Section inline-style gradient overrides */
+html.dark section[style*="linear-gradient(180deg, #E0F1FA"] {
+  background: linear-gradient(180deg, #183244 0%, #132737 100%) !important;
+}
+html.dark section[style*="linear-gradient(180deg, #EEF8FD"] {
+  background: linear-gradient(180deg, #132737 0%, #183244 100%) !important;
+}
+html.dark section[style*="linear-gradient(180deg, #F5FBFE"] {
+  background: linear-gradient(180deg, #162F43 0%, #1A3A50 60%, #132737 100%) !important;
+}
+
+/* Card surfaces: Tailwind bg-white/* classes */
+html.dark [class*="bg-white"] {
+  background-color: var(--card-bg) !important;
+  border-color: var(--card-border) !important;
+}
+
+/* Input fields with hard-coded #F8FCFE */
+html.dark [class*="bg-\\[#F8FCFE\\]"] {
+  background-color: rgba(20, 40, 56, 0.85) !important;
+  color: var(--ink) !important;
+}
+
+/* Status chips / project tag chips: hard-coded #EEF8FD */
+html.dark [class*="bg-\\[#EEF8FD\\]"] {
+  background-color: var(--bg-alt) !important;
+}
+html.dark [class*="bg-\\[#E0F1FA\\]"] {
+  background-color: var(--bg-alt) !important;
+}
+
+/* Placeholder color in dark mode */
+html.dark input::placeholder,
+html.dark textarea::placeholder {
+  color: var(--ink-soft) !important;
+  opacity: 0.5;
+}
+
+/* kbd elements */
+html.dark kbd {
+  background: var(--bg-alt) !important;
+  border-color: var(--card-border) !important;
+  color: var(--ink) !important;
+}
+
+/* Toast notification */
+html.dark [role="status"] {
+  background: var(--card-bg) !important;
+  border-color: var(--glacier) !important;
+  color: var(--ink) !important;
 }

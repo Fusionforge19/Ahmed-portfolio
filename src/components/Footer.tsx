@@ -18,7 +18,7 @@ export default function Footer() {
         <div className="flex flex-col items-center md:items-start gap-1">
           <div className="flex items-center gap-2">
             <span className="font-display font-bold text-lg text-[var(--ink)]">Ahmed<span className="text-[var(--glacier-deep)]">.</span></span>
-            <span className="text-xs font-mono font-semibold text-[var(--glacier-deep)] px-2 py-0.5 rounded-md bg-white border border-[var(--powder)]">
+            <span className="text-xs font-mono font-semibold text-[var(--glacier-deep)] px-2 py-0.5 rounded-md bg-white dark:bg-[var(--bg-alt)] border border-[var(--powder)]">
               ゲーム開発者を目指して
             </span>
           </div>
@@ -54,7 +54,7 @@ export default function Footer() {
           <button
             onClick={scrollToTop}
             aria-label="Scroll to top"
-            className="w-9 h-9 rounded-xl flex items-center justify-center border border-[var(--powder)] bg-white text-[var(--ink-soft)] hover:text-[var(--glacier-deep)] hover:border-[var(--glacier-deep)] hover:scale-105 active:scale-95 transition-all shadow-xs cursor-pointer"
+            className="w-9 h-9 rounded-xl flex items-center justify-center border border-[var(--powder)] bg-white dark:bg-[var(--bg-alt)] text-[var(--ink-soft)] hover:text-[var(--glacier-deep)] hover:border-[var(--glacier-deep)] hover:scale-105 active:scale-95 transition-all shadow-xs cursor-pointer"
           >
             <ArrowUp size={16} />
           </button>

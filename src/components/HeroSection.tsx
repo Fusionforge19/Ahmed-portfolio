@@ -21,9 +21,9 @@ export default function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative min-h-[90vh] flex items-center pt-24 pb-16 overflow-hidden"
+      className="relative min-h-[90vh] flex items-center pt-24 pb-16 overflow-hidden bg-[#F5FBFE] dark:bg-[#162F43]"
       style={{
-        background: 'linear-gradient(180deg, #F5FBFE 0%, #DFF1FA 60%, #EEF8FD 100%)',
+        background: 'linear-gradient(180deg, var(--bg) 0%, var(--sky) 30%, var(--bg-alt) 60%, var(--bg) 100%)',
       }}
     >
       {/* Soft airy blurred radial glow - replaces heavy flat blobs */}
@@ -47,7 +47,7 @@ export default function HeroSection() {
         className="relative z-10 max-w-6xl mx-auto px-6 py-12"
       >
         {/* Eyebrow badge */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-[var(--powder)] bg-white/80 text-[var(--glacier-deep)] text-xs font-mono font-semibold tracking-wider uppercase mb-6 shadow-xs">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-[var(--powder)] bg-white/80 dark:bg-[rgba(24,50,68,0.8)] text-[var(--glacier-deep)] text-xs font-mono font-semibold tracking-wider uppercase mb-6 shadow-xs">
           <Gamepad2 size={13} />
           Game Dev &amp; Software Engineer
         </div>
@@ -91,7 +91,7 @@ export default function HeroSection() {
           <a
             href={RESUME_URL}
             download
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-[var(--powder)] bg-white/80 text-[var(--ink)] font-semibold text-sm hover:border-[var(--glacier-deep)] hover:text-[var(--glacier-deep)] active:scale-95 transition-all shadow-xs"
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-xl border border-[var(--powder)] bg-white/80 dark:bg-[rgba(24,50,68,0.7)] text-[var(--ink)] font-semibold text-sm hover:border-[var(--glacier-deep)] hover:text-[var(--glacier-deep)] active:scale-95 transition-all shadow-xs"
           >
             <Download size={16} />
             Resume
@@ -134,7 +134,7 @@ function SocialLink({ href, label, children }: { href: string; label: string; ch
       target={href.startsWith('mailto') ? undefined : '_blank'}
       rel="noopener noreferrer"
       aria-label={label}
-      className="w-10 h-10 rounded-xl flex items-center justify-center bg-white/90 border border-[var(--powder)] text-[var(--ink)] hover:border-[var(--glacier-deep)] hover:text-[var(--glacier-deep)] hover:scale-105 active:scale-95 transition-all shadow-xs"
+      className="w-10 h-10 rounded-xl flex items-center justify-center bg-white/90 dark:bg-[rgba(24,50,68,0.85)] border border-[var(--powder)] dark:border-[rgba(94,158,191,0.25)] text-[var(--ink)] hover:border-[var(--glacier-deep)] hover:text-[var(--glacier-deep)] hover:scale-105 active:scale-95 transition-all shadow-xs"
     >
       {children}
     </a>

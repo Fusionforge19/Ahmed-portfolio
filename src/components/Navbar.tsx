@@ -54,8 +54,8 @@ export default function Navbar() {
   const linkCls = (href: string) =>
     `text-sm font-semibold transition-colors duration-150 px-2 py-1 rounded-md ${
       active === href.slice(1)
-        ? 'text-[var(--glacier-deep)] bg-white/70 shadow-xs'
-        : 'text-[var(--ink-soft)] hover:text-[var(--glacier-deep)] hover:bg-white/40'
+        ? 'text-[var(--glacier-deep)] bg-white/70 dark:bg-[rgba(47,134,179,0.15)] shadow-xs'
+        : 'text-[var(--ink-soft)] hover:text-[var(--glacier-deep)] hover:bg-white/40 dark:hover:bg-[rgba(47,134,179,0.1)]'
     }`;
 
   return (
@@ -124,7 +124,7 @@ export default function Navbar() {
 
       {/* Mobile dropdown */}
       {menuOpen && (
-        <div className="md:hidden bg-[#EEF8FD]/98 dark:bg-[#132737]/98 border-t border-[var(--powder)] px-6 py-4 flex flex-col gap-3 shadow-lg">
+        <div className="md:hidden bg-[#EEF8FD]/98 dark:bg-[#132737]/98 border-t border-[var(--powder)] dark:border-[rgba(94,158,191,0.2)] px-6 py-4 flex flex-col gap-3 shadow-lg">
           {NAV_LINKS.map((l) => (
             <a
               key={l.href}

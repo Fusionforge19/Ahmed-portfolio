@@ -35,7 +35,7 @@ export default function PlaySection() {
       >
         {/* Header */}
         <div className="flex flex-col items-center text-center mb-10">
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full border border-[var(--powder)] bg-white/80 text-[var(--glacier-deep)] text-xs font-mono font-semibold tracking-wider uppercase mb-3 shadow-xs">
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full border border-[var(--powder)] bg-white/80 dark:bg-[rgba(24,50,68,0.8)] text-[var(--glacier-deep)] text-xs font-mono font-semibold tracking-wider uppercase mb-3 shadow-xs">
             <Gamepad2 size={13} />
             Playable Game
           </span>
@@ -52,10 +52,10 @@ export default function PlaySection() {
         <div
           ref={containerRef}
           onMouseLeave={() => setIsPlaying(false)}
-          className="relative rounded-2xl p-2.5 md:p-3 bg-white/90 border border-[var(--powder)] shadow-[0_8px_30px_rgba(47,134,179,0.12)] transition-all"
+          className="relative rounded-2xl p-2.5 md:p-3 bg-white/90 dark:bg-[rgba(24,50,68,0.85)] border border-[var(--powder)] dark:border-[rgba(94,158,191,0.25)] shadow-[0_8px_30px_rgba(47,134,179,0.12)] transition-all"
         >
           {/* Bezel header */}
-          <div className="flex items-center justify-between px-3 py-1.5 mb-1.5 border-b border-[var(--powder)]/50 text-xs font-mono text-[var(--ink-soft)]">
+          <div className="flex items-center justify-between px-3 py-1.5 mb-1.5 border-b border-[var(--powder)]/50 dark:border-[rgba(94,158,191,0.15)] text-xs font-mono text-[var(--ink-soft)]">
             <div className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block" />
               <span className="font-semibold text-[11px] text-[var(--ink)]">GATE_DIVE // V1.0</span>
@@ -110,8 +110,8 @@ export default function PlaySection() {
 
         {/* Controls hint */}
         <div className="flex items-center justify-between text-xs font-mono text-[var(--ink-soft)] mt-4 px-2">
-          <span>Controls: <kbd className="px-1.5 py-0.5 rounded bg-white border border-[var(--powder)] text-[var(--ink)] text-[10px]">A</kbd> / <kbd className="px-1.5 py-0.5 rounded bg-white border border-[var(--powder)] text-[var(--ink)] text-[10px]">D</kbd> or <kbd className="px-1.5 py-0.5 rounded bg-white border border-[var(--powder)] text-[var(--ink)] text-[10px]">←</kbd> <kbd className="px-1.5 py-0.5 rounded bg-white border border-[var(--powder)] text-[var(--ink)] text-[10px]">→</kbd> to dodge</span>
-          <span className="hidden sm:inline">Press <kbd className="px-1.5 py-0.5 rounded bg-white border border-[var(--powder)] text-[var(--ink)] text-[10px]">Esc</kbd> to unlock scroll</span>
+          <span>Controls: <kbd className="px-1.5 py-0.5 rounded bg-white dark:bg-[var(--bg-alt)] border border-[var(--powder)] text-[var(--ink)] text-[10px]">A</kbd> / <kbd className="px-1.5 py-0.5 rounded bg-white dark:bg-[var(--bg-alt)] border border-[var(--powder)] text-[var(--ink)] text-[10px]">D</kbd> or <kbd className="px-1.5 py-0.5 rounded bg-white dark:bg-[var(--bg-alt)] border border-[var(--powder)] text-[var(--ink)] text-[10px]">←</kbd> <kbd className="px-1.5 py-0.5 rounded bg-white dark:bg-[var(--bg-alt)] border border-[var(--powder)] text-[var(--ink)] text-[10px]">→</kbd> to dodge</span>
+          <span className="hidden sm:inline">Press <kbd className="px-1.5 py-0.5 rounded bg-white dark:bg-[var(--bg-alt)] border border-[var(--powder)] text-[var(--ink)] text-[10px]">Esc</kbd> to unlock scroll</span>
         </div>
       </div>
     </section>

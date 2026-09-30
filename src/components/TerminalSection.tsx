@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Terminal, ChevronRight, X, Minus, Square } from 'lucide-react';
+import { Terminal, ChevronRight } from 'lucide-react';
 import { TERMINAL_COMMANDS } from '../data/content';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 
@@ -100,7 +100,7 @@ export default function TerminalSection() {
 
   return (
     <section id="terminal" className="py-24 relative overflow-hidden" style={{ background: 'var(--bg)' }}>
-      {/* Light sky glow background */}
+      {/* Light/dark sky glow background */}
       <div
         aria-hidden
         className="absolute inset-0 pointer-events-none opacity-50"
@@ -115,7 +115,7 @@ export default function TerminalSection() {
       >
         {/* Header */}
         <div className="text-center mb-10">
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full border border-[var(--powder)] bg-white/80 text-[var(--glacier-deep)] text-xs font-mono font-semibold tracking-wider uppercase mb-3 shadow-xs">
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full border border-[var(--powder)] bg-white/80 dark:bg-[rgba(24,50,68,0.8)] text-[var(--glacier-deep)] text-xs font-mono font-semibold tracking-wider uppercase mb-3 shadow-xs">
             <Terminal size={12} />
             Interactive Shell
           </span>
@@ -124,10 +124,10 @@ export default function TerminalSection() {
           </h2>
         </div>
 
-        {/* Frosted Light Terminal Window */}
-        <div className="rounded-2xl overflow-hidden bg-white/95 border border-[var(--powder)] shadow-[0_8px_30px_rgba(47,134,179,0.12)]">
+        {/* Terminal Window */}
+        <div className="rounded-2xl overflow-hidden bg-white/95 dark:bg-[rgba(16,32,44,0.98)] border border-[var(--powder)] dark:border-[rgba(94,158,191,0.2)] shadow-[0_8px_30px_rgba(47,134,179,0.12)]">
           {/* Title bar */}
-          <div className="flex items-center gap-2 px-5 py-3 border-b border-[var(--powder)] bg-[#EEF8FD]/80">
+          <div className="flex items-center gap-2 px-5 py-3 border-b border-[var(--powder)] dark:border-[rgba(94,158,191,0.15)] bg-[#EEF8FD]/80 dark:bg-[rgba(14,28,40,0.92)]">
             <div className="flex items-center gap-1.5">
               <span className="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E]/40" />
               <span className="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123]/40" />
@@ -175,7 +175,7 @@ export default function TerminalSection() {
           {/* Input row */}
           <form
             onSubmit={handleSubmit}
-            className="flex items-center gap-2 px-6 py-3 border-t border-[var(--powder)] bg-[#F8FCFE]"
+            className="flex items-center gap-2 px-6 py-3 border-t border-[var(--powder)] dark:border-[rgba(94,158,191,0.15)] bg-[#F8FCFE] dark:bg-[rgba(14,28,40,0.7)]"
           >
             <span className="font-mono text-sm font-semibold flex-shrink-0 text-[var(--glacier-deep)]">
               ahmed@portfolio:~$
@@ -213,8 +213,8 @@ export default function TerminalSection() {
         </div>
 
         <p className="text-center text-xs font-mono text-[var(--ink-soft)] opacity-75 mt-3">
-          Press <kbd className="bg-white border border-[var(--powder)] text-[var(--ink)] px-1.5 py-0.5 rounded text-[10px]">Tab</kbd> to complete ·&nbsp;
-          <kbd className="bg-white border border-[var(--powder)] text-[var(--ink)] px-1.5 py-0.5 rounded text-[10px]">↑ ↓</kbd> for history · Try <span className="text-[var(--glacier-deep)] font-semibold">projects</span>, <span className="text-[var(--glacier-deep)] font-semibold">skills</span>, <span className="text-[var(--glacier-deep)] font-semibold">about</span>
+          Press <kbd className="bg-white dark:bg-[var(--bg-alt)] border border-[var(--powder)] text-[var(--ink)] px-1.5 py-0.5 rounded text-[10px]">Tab</kbd> to complete ·&nbsp;
+          <kbd className="bg-white dark:bg-[var(--bg-alt)] border border-[var(--powder)] text-[var(--ink)] px-1.5 py-0.5 rounded text-[10px]">↑ ↓</kbd> for history · Try <span className="text-[var(--glacier-deep)] font-semibold">projects</span>, <span className="text-[var(--glacier-deep)] font-semibold">skills</span>, <span className="text-[var(--glacier-deep)] font-semibold">about</span>
         </p>
       </div>
     </section>
