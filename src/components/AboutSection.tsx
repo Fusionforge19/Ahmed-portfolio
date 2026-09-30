@@ -66,17 +66,9 @@ export default function AboutSection() {
               practical systems that combine design, logic, and user experience.
             </p>
 
-            {/* IEEE card */}
-            <div className="bg-white/85 dark:bg-[rgba(24,50,68,0.85)] border border-[var(--powder)] dark:border-[rgba(94,158,191,0.25)] rounded-2xl p-4 md:p-5 flex items-center gap-4 shadow-[0_4px_16px_rgba(47,134,179,0.06)]">
-              <span className="text-2xl p-2 rounded-xl bg-[var(--bg-alt)]">⚙️</span>
-              <div>
-                <p className="font-display font-bold text-[var(--ink)] text-sm md:text-base">IEEE Social Media Joint Head</p>
-                <p className="text-[var(--ink-soft)] text-xs mt-0.5">Managing technical community communications &amp; digital content strategy.</p>
-              </div>
-              <span className="ml-auto px-2.5 py-0.5 rounded-full text-[10px] font-bold border border-[var(--powder)] text-[var(--glacier-deep)] bg-[var(--bg-alt)]">
-                Active
-              </span>
-            </div>
+            <p className="text-[var(--ink-soft)] text-sm">
+              Committee member, IEEE student chapter.
+            </p>
 
             {/* Clean Skills categories */}
             <div className="space-y-4 pt-2">

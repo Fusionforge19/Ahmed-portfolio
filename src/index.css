@@ -71,9 +71,19 @@ html.dark {
   box-sizing: border-box;
 }
 
-/* Let Lenis handle smooth scrolling; do not set scroll-behavior or overflow on html */
 html {
+  scroll-behavior: smooth;
   background-color: var(--bg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+section[id] {
+  scroll-margin-top: 80px;
 }
 
 body {

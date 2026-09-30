@@ -3,24 +3,16 @@ import { SOCIAL_LINKS } from '../data/content';
 
 export default function Footer() {
   const scrollToTop = () => {
-    const lenis = (window as unknown as { __lenis?: { scrollTo: (target: number, opts: object) => void } }).__lenis;
-    if (lenis) {
-      lenis.scrollTo(0, { duration: 1.2 });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
     <footer className="relative py-12 border-t border-[var(--powder)] overflow-hidden" style={{ background: 'var(--bg-alt)' }}>
       <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
-        {/* Left: Brand & Japanese motto */}
+        {/* Left: Brand */}
         <div className="flex flex-col items-center md:items-start gap-1">
           <div className="flex items-center gap-2">
             <span className="font-display font-bold text-lg text-[var(--ink)]">Ahmed<span className="text-[var(--glacier-deep)]">.</span></span>
-            <span className="text-xs font-mono font-semibold text-[var(--glacier-deep)] px-2 py-0.5 rounded-md bg-white dark:bg-[var(--bg-alt)] border border-[var(--powder)]">
-              ゲーム開発者を目指して
-            </span>
           </div>
           <p className="text-xs text-[var(--ink-soft)] font-medium">
             CS/AIML Student · UE5 / C++ Game Developer · Mumbai University

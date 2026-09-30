@@ -8,14 +8,7 @@ export default function HeroSection() {
 
   const handleScrollTo = (targetId: string) => {
     const el = document.getElementById(targetId);
-    if (el) {
-      const lenis = (window as unknown as { __lenis?: { scrollTo: (target: HTMLElement, opts: object) => void } }).__lenis;
-      if (lenis) {
-        lenis.scrollTo(el, { offset: -64, duration: 1.2 });
-      } else {
-        el.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
+    el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   return (
@@ -60,7 +53,7 @@ export default function HeroSection() {
           Ahmed<span className="text-[var(--glacier-deep)]">.</span>
           <br />
           <span className="text-[var(--ink-soft)] text-[0.52em] font-semibold tracking-normal block mt-2">
-            UE5 &amp; C++ · CS/AIML · IEEE
+            UE5 &amp; C++ · CS/AIML
           </span>
         </h1>
 
@@ -68,8 +61,8 @@ export default function HeroSection() {
         <p className="text-[var(--ink-soft)] text-lg md:text-xl leading-relaxed max-w-2xl mb-10">
           CS engineering student at Mumbai University, building enemy AI state machines,
           Chaos Physics breakables, and weapon/hit systems in Unreal Engine 5. Also building
-          web apps, AI agents, and interactive experiences.{' '}
-          <span className="text-[var(--glacier-deep)] font-semibold">Goal: game studio in Japan. 🇯🇵</span>
+          web apps, AI agents, and interactive experiences.
+          Open to game dev and software engineering opportunities.
         </p>
 
         {/* CTAs */}

@@ -41,12 +41,7 @@ export default function Navbar() {
     const targetId = href.replace('#', '');
     const el = document.getElementById(targetId);
     if (el) {
-      const lenis = (window as unknown as { __lenis?: { scrollTo: (target: HTMLElement, opts: object) => void } }).__lenis;
-      if (lenis) {
-        lenis.scrollTo(el, { offset: -64, duration: 1.2 });
-      } else {
-        el.scrollIntoView({ behavior: 'smooth' });
-      }
+      el.scrollIntoView({ behavior: 'smooth' });
     }
     setMenuOpen(false);
   };

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import Lenis from 'lenis';
 import confetti from 'canvas-confetti';
 import Navbar from './components/Navbar';
 import HeroSection from './components/HeroSection';
@@ -23,36 +22,6 @@ export default function App() {
     const path = window.location.pathname;
     return path !== '/' && path !== '/index.html';
   });
-
-  // 1. Lenis smooth scroll initialization
-  useEffect(() => {
-    // Disable smooth scroll if user prefers reduced motion
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      return;
-    }
-
-    const lenis = new Lenis({
-      duration: 1.1,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      touchMultiplier: 1.5,
-      infinite: false,
-    });
-
-    (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
-
-    let rafId: number;
-    function raf(time: number) {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    }
-    rafId = requestAnimationFrame(raf);
-
-    return () => {
-      cancelAnimationFrame(rafId);
-      lenis.destroy();
-      (window as unknown as { __lenis?: Lenis }).__lenis = undefined;
-    };
-  }, []);
 
   // 2. Konami Code Easter Egg (↑ ↑ ↓ ↓ ← → ← → B A)
   useEffect(() => {
