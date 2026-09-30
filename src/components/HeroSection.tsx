@@ -104,9 +104,13 @@ export default function HeroSection() {
             <SocialLink href={SOCIAL_LINKS.email}    label="Email">
               <Mail size={18} />
             </SocialLink>
-            <SocialLink href={SOCIAL_LINKS.itchio}  label="Itch.io">
-              <span className="text-sm font-bold">🎮</span>
-            </SocialLink>
+            <div
+              className="w-10 h-10 rounded-xl flex items-center justify-center bg-white/60 dark:bg-[rgba(24,50,68,0.5)] border border-[var(--powder)]/50 text-[var(--ink-soft)]/60 cursor-default shadow-xs"
+              title="Itch.io (Coming soon)"
+              aria-label="Itch.io (Coming soon)"
+            >
+              <span className="text-sm">🎮</span>
+            </div>
           </div>
         </div>
 

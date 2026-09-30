@@ -74,7 +74,8 @@ export default function ContactSection() {
     {
       label: 'Itch.io',
       value: 'noname0019',
-      url: 'https://noname0019.itch.io',
+      url: undefined,
+      comingSoon: true,
       icon: <span className="text-sm font-bold">🎮</span>,
     },
   ];
@@ -119,7 +120,29 @@ export default function ContactSection() {
 
             {/* Table links */}
             <div className="border-t border-[var(--powder)] divide-y divide-[var(--powder)]">
-              {tableLinks.map((item) => (
+              {tableLinks.map((item) => item.comingSoon ? (
+                <div
+                  key={item.label}
+                  className="py-4 flex items-center justify-between opacity-70 cursor-default"
+                >
+                  <div className="flex items-center gap-3">
+                    <span className="text-[var(--glacier-deep)]">
+                      {item.icon}
+                    </span>
+                    <span className="font-mono text-xs font-semibold text-[var(--ink-soft)] uppercase tracking-wider">
+                      {item.label}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-semibold text-[var(--ink)]">
+                      {item.value}
+                    </span>
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[var(--bg-alt)] border border-[var(--powder)] text-[var(--glacier-deep)] font-semibold">
+                      Coming soon
+                    </span>
+                  </div>
+                </div>
+              ) : (
                 <a
                   key={item.label}
                   href={item.url}

@@ -40,6 +40,13 @@ function scrollToSection(id: string) {
   if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
+/* ── Autocomplete keys ─────────────────────────────────────────────────── */
+const ALL_CMD_KEYS = [
+  'help', 'about', 'projects', 'project', 'skills', 'skill',
+  'contact', 'game', 'play', 'resume', 'clear', 'easter_egg',
+  'whoami', 'ls', 'dir', 'pwd', 'sudo',
+] as const;
+
 /* ── ID counter (module-level) ───────────────────────────────────────────── */
 let _id = 0;
 const nextId = () => ++_id;
@@ -162,7 +169,7 @@ function buildContactOutput() {
         { label: 'Email',    href: 'mailto:mahmed9869@gmail.com',                         display: 'mahmed9869@gmail.com' },
         { label: 'GitHub',   href: 'https://github.com/Fusionforge19',                    display: 'github.com/Fusionforge19' },
         { label: 'LinkedIn', href: 'https://www.linkedin.com/in/ahmed-shaikh-511499316/', display: 'linkedin.com/in/ahmed-shaikh' },
-        { label: 'Itch.io',  href: 'https://noname0019.itch.io',                          display: 'noname0019.itch.io' },
+        { label: 'Itch.io',  href: 'https://noname0019.itch.io',                          display: 'noname0019 (Coming soon)' },
       ].map(({ label, href, display }) => (
         <div key={label} className="flex items-center gap-2">
           <span className="text-[var(--ink-soft)] w-16 text-xs font-mono">{label}</span>
@@ -345,13 +352,6 @@ export default function TerminalSection() {
   const [lastCmd, setLastCmd]       = useState('');
 
   const inputRef = useRef<HTMLInputElement>(null);
-
-  /* Autocomplete keys */
-  const ALL_CMD_KEYS = [
-    'help', 'about', 'projects', 'project', 'skills', 'skill',
-    'contact', 'game', 'play', 'resume', 'clear', 'easter_egg',
-    'whoami', 'ls', 'dir', 'pwd', 'sudo',
-  ];
 
   const updateSuggestion = useCallback((val: string) => {
     if (!val) { setSuggestion(''); return; }

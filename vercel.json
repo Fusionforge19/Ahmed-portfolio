@@ -1,9 +1,17 @@
 {
-  "buildCommand": "git clone https://github.com/flutter/flutter.git -b stable --depth 1 && export PATH=\"$PATH:$(pwd)/flutter/bin\" && npm install && flutter pub get && flutter build web --release --tree-shake-icons --no-wasm-dry-run",
-  "outputDirectory": "build/web",
+  "framework": "vite",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install",
+  "rewrites": [
+    {
+      "source": "/((?!assets/|game/|favicon.svg|robots.txt|sitemap.xml).*$)",
+      "destination": "/index.html"
+    }
+  ],
   "headers": [
     {
-      "source": "/(.*)\\.(wasm|js|css|woff2|woff|ttf|png|jpg|webp|svg|pdf)",
+      "source": "/assets/(.*)",
       "headers": [
         {
           "key": "Cache-Control",

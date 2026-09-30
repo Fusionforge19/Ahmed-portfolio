@@ -29,9 +29,9 @@ export default function Footer() {
             LinkedIn
           </a>
           <span>•</span>
-          <a href={SOCIAL_LINKS.itchio} target="_blank" rel="noopener noreferrer" className="hover:text-[var(--glacier-deep)] transition-colors">
-            Itch.io
-          </a>
+          <span className="text-[var(--ink-soft)]/60 cursor-default" title="Coming soon">
+            Itch.io (Soon)
+          </span>
           <span>•</span>
           <a href={SOCIAL_LINKS.email} className="hover:text-[var(--glacier-deep)] transition-colors">
             Email

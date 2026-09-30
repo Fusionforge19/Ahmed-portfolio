@@ -97,51 +97,51 @@ export default function CircuitTrackDivider() {
           {/* Sector Boundary Dots (1, 2, 3) */}
           {/* Sector 1 Marker */}
           <g transform="translate(690, 92)">
-            <circle cx="0" cy="0" r="10" fill="#FFFFFF" stroke="#2F86B3" strokeWidth="2" />
-            <text x="0" y="4" fontSize="10" fontWeight="700" fill="#2F86B3" textAnchor="middle">1</text>
+            <circle cx="0" cy="0" r="10" fill="var(--card-bg)" stroke="var(--glacier-deep)" strokeWidth="2" />
+            <text x="0" y="4" fontSize="10" fontWeight="700" fill="var(--glacier-deep)" textAnchor="middle">1</text>
           </g>
 
           {/* Sector 2 Marker */}
           <g transform="translate(1070, 222)">
-            <circle cx="0" cy="0" r="10" fill="#FFFFFF" stroke="#2F86B3" strokeWidth="2" />
-            <text x="0" y="4" fontSize="10" fontWeight="700" fill="#2F86B3" textAnchor="middle">2</text>
+            <circle cx="0" cy="0" r="10" fill="var(--card-bg)" stroke="var(--glacier-deep)" strokeWidth="2" />
+            <text x="0" y="4" fontSize="10" fontWeight="700" fill="var(--glacier-deep)" textAnchor="middle">2</text>
           </g>
 
           {/* Sector 3 Marker */}
           <g transform="translate(500, 192)">
-            <circle cx="0" cy="0" r="10" fill="#FFFFFF" stroke="#2F86B3" strokeWidth="2" />
-            <text x="0" y="4" fontSize="10" fontWeight="700" fill="#2F86B3" textAnchor="middle">3</text>
+            <circle cx="0" cy="0" r="10" fill="var(--card-bg)" stroke="var(--glacier-deep)" strokeWidth="2" />
+            <text x="0" y="4" fontSize="10" fontWeight="700" fill="var(--glacier-deep)" textAnchor="middle">3</text>
           </g>
 
-          {/* Readability Frosted Pills with thin powder-blue border */}
+          {/* Readability Frosted Pills */}
           {/* 1. START / FINISH */}
           <g transform="translate(140, 95)">
-            <rect x="-64" y="-14" width="128" height="26" rx="13" fill="#FFFFFF" stroke="#B6DCEB" strokeWidth="1.4" filter="drop-shadow(0 2px 4px rgba(47,134,179,0.10))" />
-            <text x="0" y="4" fontSize="13" fontWeight="600" letterSpacing="1.2" fill="#12324A" textAnchor="middle">
+            <rect x="-64" y="-14" width="128" height="26" rx="13" fill="var(--card-bg)" stroke="var(--card-border)" strokeWidth="1.4" filter="drop-shadow(0 2px 4px rgba(47,134,179,0.10))" />
+            <text x="0" y="4" fontSize="13" fontWeight="600" letterSpacing="1.2" fill="var(--ink)" textAnchor="middle">
               START / FINISH
             </text>
           </g>
 
           {/* 2. SECTOR 1 */}
           <g transform="translate(690, 42)">
-            <rect x="-95" y="-14" width="190" height="26" rx="13" fill="#FFFFFF" stroke="#B6DCEB" strokeWidth="1.4" filter="drop-shadow(0 2px 4px rgba(47,134,179,0.10))" />
-            <text x="0" y="4" fontSize="13" fontWeight="600" letterSpacing="1.2" fill="#12324A" textAnchor="middle">
+            <rect x="-95" y="-14" width="190" height="26" rx="13" fill="var(--card-bg)" stroke="var(--card-border)" strokeWidth="1.4" filter="drop-shadow(0 2px 4px rgba(47,134,179,0.10))" />
+            <text x="0" y="4" fontSize="13" fontWeight="600" letterSpacing="1.2" fill="var(--ink)" textAnchor="middle">
               SECTOR 1 • SPEEDWAY
             </text>
           </g>
 
           {/* 3. SECTOR 2 */}
           <g transform="translate(1060, 266)">
-            <rect x="-85" y="-14" width="170" height="26" rx="13" fill="#FFFFFF" stroke="#B6DCEB" strokeWidth="1.4" filter="drop-shadow(0 2px 4px rgba(47,134,179,0.10))" />
-            <text x="0" y="4" fontSize="13" fontWeight="600" letterSpacing="1.2" fill="#12324A" textAnchor="middle">
+            <rect x="-85" y="-14" width="170" height="26" rx="13" fill="var(--card-bg)" stroke="var(--card-border)" strokeWidth="1.4" filter="drop-shadow(0 2px 4px rgba(47,134,179,0.10))" />
+            <text x="0" y="4" fontSize="13" fontWeight="600" letterSpacing="1.2" fill="var(--ink)" textAnchor="middle">
               SECTOR 2 • HAIRPIN
             </text>
           </g>
 
           {/* 4. SECTOR 3 */}
           <g transform="translate(480, 266)">
-            <rect x="-85" y="-14" width="170" height="26" rx="13" fill="#FFFFFF" stroke="#B6DCEB" strokeWidth="1.4" filter="drop-shadow(0 2px 4px rgba(47,134,179,0.10))" />
-            <text x="0" y="4" fontSize="13" fontWeight="600" letterSpacing="1.2" fill="#12324A" textAnchor="middle">
+            <rect x="-85" y="-14" width="170" height="26" rx="13" fill="var(--card-bg)" stroke="var(--card-border)" strokeWidth="1.4" filter="drop-shadow(0 2px 4px rgba(47,134,179,0.10))" />
+            <text x="0" y="4" fontSize="13" fontWeight="600" letterSpacing="1.2" fill="var(--ink)" textAnchor="middle">
               SECTOR 3 • CHICANE
             </text>
           </g>
