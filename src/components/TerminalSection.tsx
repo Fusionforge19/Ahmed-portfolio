@@ -2,6 +2,8 @@ import { useState, useRef, useCallback } from 'react';
 import { Terminal, ChevronRight } from 'lucide-react';
 import { PROJECTS, SKILLS, RESUME_URL } from '../data/content';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import { useTheme } from '../hooks/useTheme';
+import ShapeGrid from './backgrounds/ShapeGrid';
 
 /* ── Types ───────────────────────────────────────────────────────────────── */
 interface TerminalEntry {
@@ -169,7 +171,7 @@ function buildContactOutput() {
         { label: 'Email',    href: 'mailto:mahmed9869@gmail.com',                         display: 'mahmed9869@gmail.com' },
         { label: 'GitHub',   href: 'https://github.com/Fusionforge19',                    display: 'github.com/Fusionforge19' },
         { label: 'LinkedIn', href: 'https://www.linkedin.com/in/ahmed-shaikh-511499316/', display: 'linkedin.com/in/ahmed-shaikh' },
-        { label: 'Itch.io',  href: 'https://noname0019.itch.io',                          display: 'noname0019 (Coming soon)' },
+        { label: 'Itch.io',  href: 'https://noname0019.itch.io',                          display: 'noname0019.itch.io' },
       ].map(({ label, href, display }) => (
         <div key={label} className="flex items-center gap-2">
           <span className="text-[var(--ink-soft)] w-16 text-xs font-mono">{label}</span>
@@ -223,10 +225,10 @@ function resolveCmd(
       return {
         output: (
           <span className="whitespace-pre-wrap text-[var(--ink-soft)]">
-            {`Ahmed — Computer Science Engineering student at Mumbai University.
-Focused on game development (UE5/C++) and AI systems.
-Committee member, IEEE student chapter.
-Building gameplay mechanics, real-time AI, and interactive web experiences.
+            {`Ahmed — Computer Science & AIML Engineering student at Mumbai University (2023–2028, graduating 2028).
+Focused on game development (learning UE5.6 since 2025 to present, C++ systems since 2023) and AI systems.
+Social Media Joint Head, IEEE student branch (2025–Present).
+Building gameplay mechanics, enemy AI state machines, and interactive experiences.
 Open to game dev and software engineering opportunities.`}
           </span>
         ),
@@ -271,7 +273,14 @@ Open to game dev and software engineering opportunities.`}
       return { output: '' };
 
     case 'easter_egg':
-      return { output: <span>🎮 ↑ ↑ ↓ ↓ ← → ← → B A — You found the Konami Code! Try it on the page…</span> };
+      return {
+        output: (
+          <span className="text-emerald-400 font-semibold">
+            🎮 Secret level unlocked! Developer Debug Chamber is now accessible…
+          </span>
+        ),
+        sideEffect: () => window.dispatchEvent(new Event('unlock-secret-level')),
+      };
 
     case 'whoami':
       return { output: <span className="text-[var(--ink-soft)]">ahmed (game-developer, cs-engineer)</span> };
@@ -317,6 +326,7 @@ Open to game dev and software engineering opportunities.`}
 /* ═══════════════════════════════════════════════════════════════════════════ */
 export default function TerminalSection() {
   const revealRef = useScrollReveal();
+  const { isDark } = useTheme();
 
   const runCmdRef = useRef<(cmd: string) => void>(() => {});
 
@@ -439,13 +449,25 @@ export default function TerminalSection() {
   return (
     <section
       id="terminal"
-      className="py-24 relative"
+      className="py-24 relative overflow-hidden"
       style={{ background: 'var(--bg)' }}
     >
+      {/* Living background: subtle Squares grid so it never looks blank */}
+      <div className="absolute inset-0 pointer-events-auto opacity-50 dark:opacity-25 z-0">
+        <ShapeGrid
+          shape="square"
+          squareSize={42}
+          speed={0.35}
+          direction="right"
+          borderColor={isDark ? 'rgba(94, 158, 191, 0.15)' : 'rgba(182, 220, 235, 0.3)'}
+          hoverFillColor={isDark ? 'rgba(94, 158, 191, 0.2)' : 'rgba(142, 197, 222, 0.2)'}
+        />
+      </div>
+
       {/* Subtle radial glow — light background wash */}
       <div
         aria-hidden
-        className="absolute inset-0 pointer-events-none opacity-40"
+        className="absolute inset-0 pointer-events-none opacity-40 z-0"
         style={{
           background: 'radial-gradient(ellipse 70% 50% at 50% 30%, rgba(191,227,245,0.35), transparent 75%)',
         }}

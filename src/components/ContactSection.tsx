@@ -1,10 +1,14 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Mail, Send, Copy, ExternalLink, Check } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from './Icons';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import { useTheme } from '../hooks/useTheme';
+import Aurora from './backgrounds/Aurora';
+import FloatingBubbles from './backgrounds/FloatingBubbles';
 
 export default function ContactSection() {
   const revealRef = useScrollReveal();
+  const { isDark } = useTheme();
   const [name, setName] = useState('');
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
@@ -52,7 +56,7 @@ export default function ContactSection() {
     });
   };
 
-  const tableLinks = [
+  const tableLinks: { label: string; value: string; url: string; icon: React.ReactNode; comingSoon?: boolean }[] = [
     {
       label: 'Email',
       value: 'Mahmed9869@gmail.com',
@@ -74,8 +78,7 @@ export default function ContactSection() {
     {
       label: 'Itch.io',
       value: 'noname0019',
-      url: undefined,
-      comingSoon: true,
+      url: 'https://noname0019.itch.io',
       icon: <span className="text-sm font-bold">🎮</span>,
     },
   ];
@@ -89,10 +92,21 @@ export default function ContactSection() {
       id="contact"
       className="py-24 relative overflow-hidden bg-[#EEF8FD] dark:bg-[#132737]"
     >
-      {/* Soft blurred glow */}
+      {/* Living background: Aurora variant with faint floating bubbles */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-55 dark:opacity-45 z-0">
+        <Aurora
+          colorStops={isDark ? ['#0B1A24', '#479DC7', '#163248'] : ['#B6DCEB', '#D9F0FA', '#8EC5DE']}
+          amplitude={0.85}
+          blend={0.75}
+          speed={0.5}
+        />
+      </div>
+      <FloatingBubbles bubbleCount={22} className="absolute inset-0 pointer-events-none z-0" />
+
+      {/* Soft blurred glow accent */}
       <div
         aria-hidden
-        className="absolute bottom-10 left-1/4 w-[500px] h-[350px] rounded-full opacity-35 blur-3xl pointer-events-none"
+        className="absolute bottom-10 left-1/4 w-[500px] h-[350px] rounded-full opacity-25 blur-3xl pointer-events-none z-0"
         style={{ background: 'radial-gradient(circle, #BFE3F5 0%, #8EC5DE 50%, transparent 70%)' }}
       />
 
@@ -171,7 +185,7 @@ export default function ContactSection() {
 
           {/* Right Column: Contact Form */}
           <div className="lg:col-span-6">
-            <div className="bg-white/90 dark:bg-[rgba(24,50,68,0.85)] border border-[var(--powder)] dark:border-[rgba(94,158,191,0.25)] rounded-3xl p-8 md:p-10 shadow-[0_8px_30px_rgba(47,134,179,0.10)]">
+            <div className="glass-card rounded-3xl p-8 md:p-10 border border-white/80 dark:border-white/10 shadow-glacier-lg">
               <h3 className="font-display font-bold text-xl text-[var(--ink)] mb-6">
                 Send a Message
               </h3>

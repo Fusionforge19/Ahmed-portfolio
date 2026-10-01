@@ -3,21 +3,21 @@
 export const PROJECTS = [
   {
     id: 1,
-    title: 'Artisan Fabric Marketplace MVP',
+    title: 'Ahmed Portfolio',
     description:
-      'Built a web platform that connects handicraft artisans directly with customers and reduces reliance on intermediaries.',
-    tags: ['Node.js', 'Express', 'HTML', 'CSS', 'JavaScript'],
-    statusChip: 'Full-Stack',
-    statusColor: '#1C3A5E',
-    link: 'https://github.com/Fusionforge19',
-    icon: '🛍️',
+      'Interactive Game Dev & Engineering Portfolio with real-time WebGL, Chaos Physics, NavMesh AI simulator, and sound effects.',
+    tags: ['TypeScript', 'WebGL', 'Vite', 'Canvas', 'GLSL'],
+    statusChip: 'Flagship',
+    statusColor: '#2F86B3',
+    link: 'https://github.com/Fusionforge19/Ahmed-portfolio',
+    icon: '⚡',
   },
   {
     id: 2,
     title: 'WebScout',
     description:
       'Autonomous AI agent that researches and verifies real products across the live web with zero hallucinations, using step-by-step planning, live Tavily search, and grounded multi-source verification.',
-    tags: ['React 19', 'Vite', 'Tailwind CSS', 'Framer Motion', 'Firebase', 'Supabase'],
+    tags: ['AI Agent', 'Vite', 'Framer Motion', 'Firebase', 'Supabase'],
     statusChip: 'AI Agent',
     statusColor: '#5A87AC',
     link: 'https://github.com/Fusionforge19/websouct',
@@ -28,22 +28,22 @@ export const PROJECTS = [
     title: 'MoodMap',
     description:
       'An emotion-driven ambient companion — describe how you feel and get an AI-generated mood reflection, dynamic color palette, and a real matching song, powered by Gemini + iTunes.',
-    tags: ['JavaScript', 'Vite', 'Gemini AI', 'Framer Motion', 'Tailwind CSS'],
-    statusChip: 'AI',
+    tags: ['JavaScript', 'Vite', 'Gemini AI', 'Framer Motion', 'iTunes API'],
+    statusChip: 'AI Companion',
     statusColor: '#1C3A5E',
     link: 'https://github.com/Fusionforge19/moodmap',
     icon: '🎭',
   },
   {
     id: 4,
-    title: 'Developer Portfolio',
+    title: 'Fusionforge19',
     description:
-      'Personal developer portfolio showcasing Unreal Engine game development, C++ systems, and web projects.',
-    tags: ['HTML', 'CSS', 'JavaScript'],
-    statusChip: 'Portfolio',
+      'Developer workspace and GitHub profile ecosystem showcasing open-source contributions, engineering stack, and project roadmaps.',
+    tags: ['Markdown', 'GitHub', 'CI/CD', 'Open Source'],
+    statusChip: 'Profile & Docs',
     statusColor: '#5A87AC',
-    link: 'https://github.com/Fusionforge19/portfolio',
-    icon: '👤',
+    link: 'https://github.com/Fusionforge19/Fusionforge19',
+    icon: '🚀',
   },
   {
     id: 5,
@@ -66,17 +66,17 @@ export const ALL_TAGS = Array.from(
 
 export const SKILLS = {
   Languages:       ['C++', 'Python'],
-  'Engines / Tools': ['Unreal Engine 5', 'Blueprints', 'WebGL', 'Git', 'Blender', 'Perforce'],
+  'Engines / Tools': ['Unreal Engine 5.6', 'Blueprints', 'WebGL', 'Git', 'Blender', 'Perforce'],
   Systems:         ['Gameplay Mechanics', 'State Machines', 'NavMesh AI', 'Chaos Physics', 'Hit Systems'],
   'AI / ML':       ['TensorFlow', 'Gemini AI', 'AI Agents', 'Prompt Engineering'],
 } as const;
 
 export const TECH_MARQUEE = [
-  'Unreal Engine 5',
+  'Unreal Engine 5.6',
   'C++',
   'Blueprints',
   'Python',
-  'React',
+  'Data Structures',
   'TensorFlow',
   'Git',
   'Blender',
@@ -87,12 +87,13 @@ export const TECH_MARQUEE = [
 ];
 
 export const NAV_LINKS = [
-  { label: 'Hero',     href: '#hero' },
-  { label: 'Play',     href: '#play' },
-  { label: 'Terminal', href: '#terminal' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'About',    href: '#about' },
-  { label: 'Contact',  href: '#contact' },
+  { label: 'Hero',       href: '#hero' },
+  { label: 'About',      href: '#about' },
+  { label: 'Projects',   href: '#projects' },
+  { label: 'Play',       href: '#play' },
+  { label: 'Terminal',   href: '#terminal' },
+  { label: 'Experience', href: '#experience' },
+  { label: 'Contact',    href: '#contact' },
 ] as const;
 
 export const SOCIAL_LINKS = {
@@ -110,9 +111,9 @@ export const TERMINAL_COMMANDS: Record<string, string> = {
   about:
     'Ahmed — Computer Science Engineering Student & Unreal Engine / C++ Developer.\nBuilding interactive experiences, gameplay mechanics, and real-time AI systems.',
   projects:
-    'Featured Projects:\n  1. Artisan Fabric Marketplace MVP — Full-stack web app\n  2. WebScout — Autonomous AI research agent\n  3. MoodMap — AI mood companion with song matching\n  4. Developer Portfolio — Unreal Engine & C++ showcase\n  5. Gate Dive — WebGL speed-runner game (play above!)\n\n→ Type `contact` or scroll to Projects section for details.',
+    'Featured Projects:\n  1. Ahmed Portfolio — Flagship WebGL & TypeScript interactive portfolio\n  2. WebScout — Autonomous AI research agent\n  3. MoodMap — AI mood companion with song matching\n  4. Developer Portfolio — Unreal Engine & C++ showcase\n  5. Textile — Handicraft artisan marketplace platform\n\n→ Type `contact` or scroll to Projects section for details.',
   skills:
-    'Tech Stack:\n  • Languages : C++, Python\n  • Engines   : Unreal Engine 5 (C++ & Blueprints), WebGL\n  • Systems   : Gameplay mechanics, State Machines, Git, AI Agents',
+    'Tech Stack:\n  • Languages : C++, Python\n  • Engines   : Unreal Engine 5.6 (C++ & Blueprints), WebGL\n  • Systems   : Gameplay mechanics, State Machines, Git, AI Agents',
   contact:
     'Get in touch:\n  GitHub   → https://github.com/Fusionforge19\n  LinkedIn → https://www.linkedin.com/in/ahmed-shaikh-511499316/\n  Email    → mahmed9869@gmail.com\n  Itch.io  → https://noname0019.itch.io',
   play:  '⚡ Launching Gate Dive... Scroll up to the PLAY section to jump in!',

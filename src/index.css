@@ -96,13 +96,31 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* ─── Clean Glassmorphism Card (subtle, no heavy neon) ─────────────────── */
+/* ─── Premium Glassmorphism Cards ────────────────────────────────────────── */
 .glass-card {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  box-shadow: 0 4px 20px var(--card-shadow);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow: 0 4px 24px rgba(76, 155, 192, 0.16);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+html.dark .glass-card {
+  background: rgba(24, 50, 68, 0.75);
+  border: 1px solid rgba(94, 158, 191, 0.25);
+  box-shadow: 0 4px 24px rgba(11, 26, 36, 0.45);
+}
+
+.glass-card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(76, 155, 192, 0.22);
+  border-color: rgba(142, 197, 222, 0.8);
+}
+
+html.dark .glass-card-hover:hover {
+  box-shadow: 0 8px 32px rgba(11, 26, 36, 0.6);
+  border-color: rgba(94, 158, 191, 0.45);
 }
 
 /* ─── Gradient Text Utility ─────────────────────────────────────────────── */
@@ -120,14 +138,14 @@ html.dark .gradient-text {
   background-clip: text;
 }
 
-/* ─── Very subtle noise grain (2% opacity) ─────────────────────────────── */
+/* ─── Subtle noise grain (3.5% opacity) ─────────────────────────────────── */
 .noise-overlay::after {
   content: '';
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 9999;
-  opacity: 0.02;
+  opacity: 0.035;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
 }
 

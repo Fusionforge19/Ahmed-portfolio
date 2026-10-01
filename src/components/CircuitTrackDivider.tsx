@@ -1,45 +1,57 @@
 import { useEffect, useRef } from 'react';
+import { animate, createMotionPath } from 'animejs';
 
 export default function CircuitTrackDivider() {
   const carRef = useRef<SVGGElement>(null);
   const pathRef = useRef<SVGPathElement>(null);
 
   useEffect(() => {
-    let animationId: number;
-    let startTime: number | null = null;
-    const DURATION = 6000; // ms per lap
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     const path = pathRef.current;
-    const car  = carRef.current;
+    const car = carRef.current;
     if (!path || !car) return;
 
-    const totalLength = path.getTotalLength();
+    let anim: ReturnType<typeof animate> | null = null;
 
-    function frame(timestamp: number) {
-      if (!startTime) startTime = timestamp;
-      const elapsed = (timestamp - startTime) % DURATION;
-      const progress = elapsed / DURATION;
-      const dist = totalLength * progress;
+    try {
+      const motionPath = createMotionPath(path);
+      if (motionPath) {
+        anim = animate(car, {
+          ...motionPath,
+          duration: 6200,
+          ease: 'linear',
+          loop: true,
+        });
+      }
+    } catch {
+      // Fallback to requestAnimationFrame if SVG path parser requires DOM attachment
+      const totalLength = path.getTotalLength();
+      let startTime: number | null = null;
+      let reqId: number;
+      const DURATION = 6200;
 
-      if (!path || !car) return;
+      function frame(timestamp: number) {
+        if (!startTime) startTime = timestamp;
+        const elapsed = (timestamp - startTime) % DURATION;
+        const progress = elapsed / DURATION;
+        const dist = totalLength * progress;
 
-      const point = path.getPointAtLength(dist);
-      const pointAhead = path.getPointAtLength(Math.min(dist + 2, totalLength));
-      const angle = (Math.atan2(pointAhead.y - point.y, pointAhead.x - point.x) * 180) / Math.PI;
+        if (!path || !car) return;
+        const point = path.getPointAtLength(dist);
+        const pointAhead = path.getPointAtLength(Math.min(dist + 2, totalLength));
+        const angle = (Math.atan2(pointAhead.y - point.y, pointAhead.x - point.x) * 180) / Math.PI;
 
-      car.setAttribute(
-        'transform',
-        `translate(${point.x}, ${point.y}) rotate(${angle})`
-      );
-
-      animationId = requestAnimationFrame(frame);
+        car.setAttribute('transform', `translate(${point.x}, ${point.y}) rotate(${angle})`);
+        reqId = requestAnimationFrame(frame);
+      }
+      reqId = requestAnimationFrame(frame);
+      return () => cancelAnimationFrame(reqId);
     }
 
-    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      animationId = requestAnimationFrame(frame);
-    }
-
-    return () => cancelAnimationFrame(animationId);
+    return () => {
+      anim?.pause();
+    };
   }, []);
 
   return (
